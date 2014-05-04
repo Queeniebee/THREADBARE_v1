@@ -1,7 +1,7 @@
 //--------
-// Based on the MultiSensor Example from the NewPing library
-// by Tim Eckel - teckel@leethost.com
+// Based on the MultiSensor Example from the NewPing library by Tim Eckel - teckel@leethost.com
 // Copyright 2012 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
+// by Jo as Queeniebee
 //--------
 
 #include <NewPing.h>
@@ -16,10 +16,12 @@
 #define ECHO_PIN_2    10
 
 unsigned long pingTimer[NUM_SENSORS]; // Holds the times when the next ping should happen for each sensor.
-unsigned int firstSensor[4];          // array to avg out the first sensor values
-unsigned int secondSensor[4];         // array to avg out the second sensor values
+//unsigned int firstSensor[4];          // array to avg out the first sensor values
+//unsigned int secondSensor[4];         // array to avg out the second sensor values
 
 unsigned int cm[NUM_SENSORS];         // Where the ping distances to the openFrameworks sketch are stored.
+unsigned int firstSensor;
+unsigned int secondSensor;
 uint8_t currentSensor = 0;            // Keeps track of which sensor is active.
 
 NewPing sonar[NUM_SENSORS] = {     
@@ -30,52 +32,54 @@ NewPing sonar[NUM_SENSORS] = {
 void setup() {
   Serial.begin(9600);
   pingTimer[0] = millis() + 75;           // First ping starts at 75ms, gives time for the Arduino to chill before starting.
-  for (uint8_t i = 1; i < NUM_SENSORS; i++) // Set the starting time for each sensor.
+  for (uint8_t i = 1; i < NUM_SENSORS; i++){ // Set the starting time for each sensor.
     pingTimer[i] = pingTimer[i - 1] + PING_INTERVAL;
+  }  
+  establishContact();
 }
 
 void loop() {
   for (uint8_t i = 0; i < NUM_SENSORS; i++) { // Loop through all the sensors.
     if (millis() >= pingTimer[i]) {         // Is it this sensor's time to ping?
       pingTimer[i] += PING_INTERVAL * NUM_SENSORS;  // Set next time this sensor will be pinged.
+
       // Sensor ping cycle complete, do something with the results.
       if (i == 0 && currentSensor == (NUM_SENSORS - 1)){ 
         oneSensorCycle(); 
-      } 
+      }
       sonar[currentSensor].timer_stop();          // Make sure previous timer is canceled before starting a new ping (insurance).
       currentSensor = i;                          // Sensor being accessed.
       cm[currentSensor] = 0;                      // Make distance zero in case there's no ping echo for this sensor.
       sonar[currentSensor].ping_timer(echoCheck); // Do the ping (processing continues, interrupt will call echoCheck to look for echo).
     }
   }
-  // The rest of your code would go here.
+
 }
 
 void echoCheck() { // If ping received, set the sensor distance to array.
   if (sonar[currentSensor].check_timer()){
- /*   for(uint8_t i = 0; i < 4; i++){
-      if(currentSensor == 0){
-      firstSensor[i] = sonar[currentSensor].ping_result;
-      cm[currentSensor] += firstSensor[i];
-      cm[currentSensor] = cm[currentSensor] / 4;
-      } else{
-          secondSensor[i] = sonar[currentSensor].ping_result;
-          cm[currentSensor] += secondSensor[i];
-          cm[currentSensor] = cm[currentSensor] / 4;
-   }
-    }
-  cm[currentSensor] = cm[currentSensor] / US_ROUNDTRIP_CM; */
-
-  cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+    cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
   }
 }
 
-void oneSensorCycle() { // Sensor ping cycle complete, do something with the results.
-  for (uint8_t i = 0; i < NUM_SENSORS; i++) {
-    Serial.print(i);
-    Serial.print("=");
-    Serial.print(cm[i]);
-    Serial.print("cm ");
+void oneSensorCycle() {
+  for(uint8_t i = 0; i < NUM_SENSORS; i++){
+    //    firstSensor = cm[0];
+    //    secondSensor = cm[1];
+
+    Serial.write('1');
+    Serial.write(cm[0]);
+    Serial.write('2');
+    Serial.write(cm[1]);
   }
-  Serial.println();
+  Serial.write('z');
+
 }
+
+void establishContact() {
+  while (Serial.available() <= 0) {
+    Serial.write('B');   // send an initial byte
+    delay(29);
+  }
+}
+
