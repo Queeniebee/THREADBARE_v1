@@ -16,10 +16,12 @@
 #define ECHO_PIN_2    10
 
 unsigned long pingTimer[NUM_SENSORS]; // Holds the times when the next ping should happen for each sensor.
-unsigned int firstSensor[4];          // array to avg out the first sensor values
-unsigned int secondSensor[4];         // array to avg out the second sensor values
+//unsigned int firstSensor[4];          // array to avg out the first sensor values
+//unsigned int secondSensor[4];         // array to avg out the second sensor values
 
 unsigned int cm[NUM_SENSORS];         // Where the ping distances to the openFrameworks sketch are stored.
+unsigned int firstSensor;
+unsigned int secondSensor;
 uint8_t currentSensor = 0;            // Keeps track of which sensor is active.
 
 NewPing sonar[NUM_SENSORS] = {     
@@ -60,12 +62,16 @@ void echoCheck() { // If ping received, set the sensor distance to array.
   }
 }
 
-void oneSensorCycle() { // Sensor ping cycle complete, do something with the results.
-    Serial.write('z');
+void oneSensorCycle() { // Sensor ping cycle complete, do something with the result
+    firstSensor = cm[0];
+    secondSensor = cm[1];
+
     Serial.write('1');
-    Serial.write(cm[0]);
+    Serial.write(firstSensor);
     Serial.write('2');
-    Serial.write(cm[1]);
+    Serial.write(secondSensor);
+    Serial.write('z');
+
 }
 
 void establishContact() {
