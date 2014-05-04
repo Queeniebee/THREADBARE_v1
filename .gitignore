@@ -1,0 +1,6 @@
+.DS_STORE
+config.make
+Makefile
+Project.xcconfig
+THREADBARE_v1.xcodeproj/
+openFrameworks-Info.plist
