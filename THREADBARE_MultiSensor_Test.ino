@@ -1,9 +1,14 @@
+//--------
+// Based on the MultiSensor Example from the NewPing library
+// by Tim Eckel - teckel@leethost.com
+// Copyright 2012 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
+//--------
+
 #include <NewPing.h>
 
 #define NUM_SENSORS    2 // Number or sensors.
-#define MAX_DISTANCE 300 // Maximum distance (in cm) to ping.
+#define MAX_DISTANCE 400 // Maximum distance (in cm) to ping.
 #define PING_INTERVAL 33 // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
-
 
 #define TRIGGER_PIN_1 13
 #define ECHO_PIN_1    12
@@ -11,11 +16,14 @@
 #define ECHO_PIN_2    10
 
 unsigned long pingTimer[NUM_SENSORS]; // Holds the times when the next ping should happen for each sensor.
-unsigned int cm[NUM_SENSORS];         // Where the ping distances are stored.
-uint8_t currentSensor = 0;          // Keeps track of which sensor is active.
+unsigned int firstSensor[4];          // array to avg out the first sensor values
+unsigned int secondSensor[4];         // array to avg out the second sensor values
 
-NewPing sonar[NUM_SENSORS] = {     // Sensor object array.
-  NewPing(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE), // Each sensor's trigger pin, echo pin, and max distance to ping.
+unsigned int cm[NUM_SENSORS];         // Where the ping distances to the openFrameworks sketch are stored.
+uint8_t currentSensor = 0;            // Keeps track of which sensor is active.
+
+NewPing sonar[NUM_SENSORS] = {     
+  NewPing(TRIGGER_PIN_1, ECHO_PIN_1, MAX_DISTANCE),
   NewPing(TRIGGER_PIN_2, ECHO_PIN_2, MAX_DISTANCE),
 };
 
@@ -30,7 +38,8 @@ void loop() {
   for (uint8_t i = 0; i < NUM_SENSORS; i++) { // Loop through all the sensors.
     if (millis() >= pingTimer[i]) {         // Is it this sensor's time to ping?
       pingTimer[i] += PING_INTERVAL * NUM_SENSORS;  // Set next time this sensor will be pinged.
-      if (i == 0 && currentSensor == 1){ // Sensor ping cycle complete, do something with the results.
+      // Sensor ping cycle complete, do something with the results.
+      if (i == 0 && currentSensor == (NUM_SENSORS - 1)){ 
         oneSensorCycle(); 
       } 
       sonar[currentSensor].timer_stop();          // Make sure previous timer is canceled before starting a new ping (insurance).
@@ -43,9 +52,9 @@ void loop() {
 }
 
 void echoCheck() { // If ping received, set the sensor distance to array.
-  if (sonar[currentSensor].check_timer())
-    cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
-//    cm[currentSensor] = sonar[currentSensor].convert_cm();
+  if (sonar[currentSensor].check_timer()){
+  cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+  }
 }
 
 void oneSensorCycle() { // Sensor ping cycle complete, do something with the results.
