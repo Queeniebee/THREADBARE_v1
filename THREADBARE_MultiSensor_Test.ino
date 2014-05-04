@@ -1,3 +1,9 @@
+//--------
+// Based on the MultiSensor Example from the NewPing library
+// by Tim Eckel - teckel@leethost.com
+// Copyright 2012 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
+//--------
+
 #include <NewPing.h>
 
 #define NUM_SENSORS    2 // Number or sensors.
@@ -30,7 +36,7 @@ void loop() {
   for (uint8_t i = 0; i < NUM_SENSORS; i++) { // Loop through all the sensors.
     if (millis() >= pingTimer[i]) {         // Is it this sensor's time to ping?
       pingTimer[i] += PING_INTERVAL * NUM_SENSORS;  // Set next time this sensor will be pinged.
-      if (i == 0 && currentSensor == 1){ // Sensor ping cycle complete, do something with the results.
+      if (i == 0 && currentSensor == (NUM_SENSORS - 1)){ // Sensor ping cycle complete, do something with the results.
         oneSensorCycle(); 
       } 
       sonar[currentSensor].timer_stop();          // Make sure previous timer is canceled before starting a new ping (insurance).
@@ -45,7 +51,8 @@ void loop() {
 void echoCheck() { // If ping received, set the sensor distance to array.
   if (sonar[currentSensor].check_timer())
     cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
-//    cm[currentSensor] = sonar[currentSensor].convert_cm();
+//    cm[currentSensor] = sonar[currentSensor].ping_cm();
+
 }
 
 void oneSensorCycle() { // Sensor ping cycle complete, do something with the results.
