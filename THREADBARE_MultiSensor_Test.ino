@@ -53,19 +53,20 @@ void loop() {
 
 void echoCheck() { // If ping received, set the sensor distance to array.
   if (sonar[currentSensor].check_timer()){
-    for(uint8_t i = 0; i < 4; i++){
+ /*   for(uint8_t i = 0; i < 4; i++){
       if(currentSensor == 0){
-      firstSensor[i] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+      firstSensor[i] = sonar[currentSensor].ping_result;
       cm[currentSensor] += firstSensor[i];
       cm[currentSensor] = cm[currentSensor] / 4;
       } else{
-          secondSensor[i] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+          secondSensor[i] = sonar[currentSensor].ping_result;
           cm[currentSensor] += secondSensor[i];
           cm[currentSensor] = cm[currentSensor] / 4;
-      
-      }
+   }
     }
-//  cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+  cm[currentSensor] = cm[currentSensor] / US_ROUNDTRIP_CM; */
+
+  cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
   }
 }
 
