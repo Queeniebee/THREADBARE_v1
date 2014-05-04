@@ -38,6 +38,7 @@ void loop() {
   for (uint8_t i = 0; i < NUM_SENSORS; i++) { // Loop through all the sensors.
     if (millis() >= pingTimer[i]) {         // Is it this sensor's time to ping?
       pingTimer[i] += PING_INTERVAL * NUM_SENSORS;  // Set next time this sensor will be pinged.
+      
       // Sensor ping cycle complete, do something with the results.
       if (i == 0 && currentSensor == (NUM_SENSORS - 1)){ 
         oneSensorCycle(); 
@@ -48,7 +49,7 @@ void loop() {
       sonar[currentSensor].ping_timer(echoCheck); // Do the ping (processing continues, interrupt will call echoCheck to look for echo).
     }
   }
-  // The rest of your code would go here.
+
 }
 
 void echoCheck() { // If ping received, set the sensor distance to array.
