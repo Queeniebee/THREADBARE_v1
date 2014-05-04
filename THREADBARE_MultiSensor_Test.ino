@@ -30,8 +30,10 @@ NewPing sonar[NUM_SENSORS] = {
 void setup() {
   Serial.begin(9600);
   pingTimer[0] = millis() + 75;           // First ping starts at 75ms, gives time for the Arduino to chill before starting.
-  for (uint8_t i = 1; i < NUM_SENSORS; i++) // Set the starting time for each sensor.
+  for (uint8_t i = 1; i < NUM_SENSORS; i++){ // Set the starting time for each sensor.
     pingTimer[i] = pingTimer[i - 1] + PING_INTERVAL;
+  }  
+  establishContact();
 }
 
 void loop() {
@@ -42,7 +44,7 @@ void loop() {
       // Sensor ping cycle complete, do something with the results.
       if (i == 0 && currentSensor == (NUM_SENSORS - 1)){ 
         oneSensorCycle(); 
-      } 
+      }
       sonar[currentSensor].timer_stop();          // Make sure previous timer is canceled before starting a new ping (insurance).
       currentSensor = i;                          // Sensor being accessed.
       cm[currentSensor] = 0;                      // Make distance zero in case there's no ping echo for this sensor.
@@ -59,11 +61,16 @@ void echoCheck() { // If ping received, set the sensor distance to array.
 }
 
 void oneSensorCycle() { // Sensor ping cycle complete, do something with the results.
-  for (uint8_t i = 0; i < NUM_SENSORS; i++) {
-    Serial.print(i);
-    Serial.print("=");
-    Serial.print(cm[i]);
-    Serial.print("cm ");
+    Serial.write('z');
+    Serial.write('1');
+    Serial.write(cm[0]);
+    Serial.write('2');
+    Serial.write(cm[1]);
+}
+
+void establishContact() {
+  while (Serial.available() <= 0) {
+    Serial.write('B');   // send an initial byte
+    delay(300);
   }
-  Serial.println();
 }
