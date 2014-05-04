@@ -1,6 +1,11 @@
 #pragma once
 
+#define GLFW_EXPOSE_NATIVE_COCOA
+#define GLFW_EXPOSE_NATIVE_NSGL
+
 #include "ofMain.h"
+#include <GLFW/glfw3.h>
+#include "GLFW/glfw3native.h"
 
 class ofApp : public ofBaseApp{
 public:
