@@ -7,7 +7,7 @@
 #include <NewPing.h>
 
 #define NUM_SENSORS    2 // Number or sensors.
-#define MAX_DISTANCE 500 // Maximum distance (in cm) to ping.
+#define MAX_DISTANCE 400 // Maximum distance (in cm) to ping.
 #define PING_INTERVAL 33 // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
 
 #define TRIGGER_PIN_1 13
