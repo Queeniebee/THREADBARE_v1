@@ -32,34 +32,21 @@ void ofApp::update(){
     unsigned char bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int Result = 0;
-    cout<<"firstSensor before: "<<firstSensor[0]<<endl;
-    for(int i = 0; i < NUM_AVG; i++){
-    firstSensor[i] = 0;
-    secondSensor[i] = 0;
-    }
+    cout<<"firstSensor before: "<<firstSensor<<endl;
+
     // This is a good serial read formula
     while(bytesRemaining > 0){
         if(serial.available() > 0){
             int bytesPreventOverwrite = bytesRequired - bytesRemaining;
             Result = serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
                 if(bytesReturned[Result] == '1'){
-                    firstSensor[0] = bytesReturned[Result-1];
-                    firstSensor[1] = bytesReturned[Result-1];
-                    firstSensor[2] = bytesReturned[Result-1];
-                    firstSensor[3] = bytesReturned[Result-1];
-                    firstSensor[4] = bytesReturned[Result-1];
-
-                    cout<<"firstSensor after1: "<<firstSensor[0]<<endl;
+                    firstSensor = bytesReturned[Result-1];
+                    cout<<"firstSensor after1: "<<firstSensor<<endl;
                 
                 }
                 if(bytesReturned[Result] == '2'){
-                    secondSensor[0] = bytesReturned[Result-1];
-                    secondSensor[1] = bytesReturned[Result-1];
-                    secondSensor[2] = bytesReturned[Result-1];
-                    secondSensor[3] = bytesReturned[Result-1];
-                    secondSensor[4] = bytesReturned[Result-1];
-
-                    cout<<"secondSensor after1: "<<secondSensor[0]<<endl;
+                    secondSensor = bytesReturned[Result-1];
+                    cout<<"secondSensor after1: "<<secondSensor<<endl;
 
             }
             bytesRemaining -= Result;
@@ -70,14 +57,6 @@ void ofApp::update(){
         }
 
     video.update();
-    //    int somevalue, somevalue2;
-    somevalue = averageSensor1(firstSensor);
-    cout<<"firstSensor after2: "<<somevalue<<endl;
-    
-    somevalue2 = averageSensor2(secondSensor);
-    cout<<"SecondSensor after2: "<<somevalue2<<endl;
-    
-    
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -101,7 +80,7 @@ void ofApp::draw(){
     
 
     float shaderValue;
-    shaderValue = triggerFunction(somevalue, somevalue2);
+    shaderValue = triggerFunction(firstSensor, secondSensor);
     cout<<"sensorValue: "<<shaderValue<<endl;
 
 
@@ -167,24 +146,24 @@ float ofApp::triggerFunction(int sensorValue, int sensorValue2){
         //Will add change between video clips
     } else if (((sensorValue >= 10) && (sensorValue < 64)) || ((sensorValue2 >= 10) && (sensorValue2 < 25))){
         
-        sensorValue2 = 0.1;
+        alphaValue = 0.25;
         return alphaValue;
 
 
     } else if (((sensorValue >= 64) && (sensorValue < 128)) || ((sensorValue2 >= 64) && (sensorValue2 < 128))){
-        alphaValue = 0.25;
+        alphaValue = 0.5;
         return alphaValue;
 
 
     
     } else if (((sensorValue >= 128) && (sensorValue < 192)) || ((sensorValue2 >= 128) && (sensorValue2 < 192))){
-        alphaValue = 0.3;
+        alphaValue = 0.75;
         return alphaValue;
 
 
         
     } else if (((sensorValue >= 192) && (sensorValue < 256)) || ((sensorValue2 >= 192) && (sensorValue2 < 256))){
-        alphaValue = 0.4;
+        alphaValue = 1.0;
         return alphaValue;
 
     } else{

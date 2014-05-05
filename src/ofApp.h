@@ -36,7 +36,7 @@ public:
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
-    int firstSensor[NUM_AVG], secondSensor[NUM_AVG];
+    int firstSensor, secondSensor;
     int somevalue, somevalue2;
 
 };
