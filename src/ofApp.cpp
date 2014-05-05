@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
+    ofSetVerticalSync(true);
     shader.load("shader.vert", "shader.frag");
     video.loadMovie("test_video/Resources/test_video.mov");
     video.play();
