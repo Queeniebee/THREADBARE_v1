@@ -3,6 +3,8 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #define GLFW_EXPOSE_NATIVE_NSGL
 
+#define NUM_CLIPS 4
+
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
 #include "GLFW/glfw3native.h"
@@ -24,4 +26,8 @@ public:
     void gotMessage(ofMessage msg);
     
     ofShader shader;
+    ofFbo fbo[NUM_CLIPS];
+    
+    ofSerial serial;
+    int firstSensor, secondSensor = 0;
 };
