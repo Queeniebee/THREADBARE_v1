@@ -5,3 +5,4 @@ Project.xcconfig
 THREADBARE_v1.xcodeproj/
 openFrameworks-Info.plist
 bin/THREADBARE_v1Debug.app/
+bin/data/test_video/

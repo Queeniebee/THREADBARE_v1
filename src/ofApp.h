@@ -26,7 +26,8 @@ public:
     void gotMessage(ofMessage msg);
     
     ofShader shader;
-    ofFbo fbo[NUM_CLIPS];
+    ofVideoPlayer video;
+    ofFbo fbo, maskFbo;
     
     ofSerial serial;
     int firstSensor, secondSensor = 0;

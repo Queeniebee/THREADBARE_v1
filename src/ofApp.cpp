@@ -3,10 +3,25 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-		shader.load("shader.vert", "shader.frag");
+    shader.load("shader.vert", "shader.frag");
+    video.loadMovie("test_video/Resources/test_video.mov");
     
-        serial.enumerateDevices();
-        serial.setup(0,9600);
+//    int width = video.getWidth();
+//    int height = video.getHeight();
+    
+    maskFbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
+    fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
+    
+    maskFbo.begin();
+    ofClear(0,0,0,255);
+    maskFbo.end();
+    
+    fbo.begin();
+    ofClear(0,0,0,255);
+    fbo.end();
+
+    serial.enumerateDevices();
+    serial.setup(0,9600);
 }
 
 //--------------------------------------------------------------
@@ -17,20 +32,7 @@ void ofApp::update(){
     int bytesRemaining = bytesRequired;
     int Result = 0;
     
-//    if(serial.available() > 0){
-//        serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);            
-//        if(bytesReturned[0] == '1'){
-//            firstSensor = bytesReturned[1];
-//            cout<<"FirstSensor: "<<firstSensor<<endl;
-//        }
-//        if(bytesReturned[2] == '2'){
-//            secondSensor = bytesReturned[3];
-//            cout<<"SecondSensor: "<<secondSensor<<endl;
-//            }
-//        serial.flush();
-//        serial.writeByte('A');
-//        
-//    }
+    // This is a good serial read formula
     while(bytesRemaining > 0){
         if(serial.available() > 0){
             int bytesPreventOverwrite = bytesRequired - bytesRemaining;
@@ -49,10 +51,22 @@ void ofApp::update(){
         serial.writeByte('A');
         }
     }
+    
+    video.update();
+    
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    
+    
+    ofSetColor(255);
+    
+    fbo.begin();
+    video.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+    fbo.end();
+    fbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+    
+    float secondSensor2;
     float time = 0.0;
     if(ofGetElapsedTimef() >= 30.0){
         
@@ -66,14 +80,30 @@ void ofApp::draw(){
     }
     float change = 0.076+10.0;
     float percent = fmod(time,change);
-    ofSetColor(255);
+    
+
+    //This fbo is in draw because the "mask" is the shader of lerped colors
+    //It is in this fbo where we will use the values from ofSerial
+    if(((secondSensor >= 100) && (secondSensor < 127)) || ((firstSensor >= 100) && (firstSensor < 127))){
+        secondSensor2 = 0.5;
+    } else{
+    
+        secondSensor2 = 0.3;
+    
+    }
+    maskFbo.begin();
     
     shader.begin();
-    shader.setUniform1f("time", time);
     shader.setUniform1f("percent", percent);
-
-    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    shader.setUniform1f("alpha", secondSensor2);
+    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
     shader.end();
+    maskFbo.end();
+    
+    maskFbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+    
+
+    
 }
 
 //--------------------------------------------------------------
