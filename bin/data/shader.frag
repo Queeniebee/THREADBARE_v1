@@ -1,8 +1,24 @@
+/*
 #version 120
 
-//uniform float time;
-//const float change = 0.076;
-//float percent = mod(time*0.079, 10.0*change);
+uniform sampler2DRect tex0;
+uniform sampler2DRect maskTex;
+
+varying vec2 texCoordVarying;
+
+void main()
+{
+    // Get color value from
+    vec3 src = texture2DRect(tex0, texCoordVarying).rgb;
+    
+    // Get alpha value
+    float mask = texture2DRect(maskTex, texCoordVarying).r;
+    
+    // Set
+    gl_FragColor = vec4(src , mask);
+}
+*/
+#version 120
 
 uniform float time;
 uniform float percent;
@@ -10,27 +26,20 @@ uniform float alpha;
 
 
 void main() {
+
+
 //    TEST COLOR
 //    vec4 colorRight = vec4(1.0, 0.0, 1.0, 1.0);
     
     // The right color
-    vec4 colorRight = vec4(0.0289, 0.0, 0.05, 1.0);
-    
-    vec4 colorLeft = vec4(0.0, 0.0, 0.0, 1.0);
-    vec4 colorMix;
-    
-    colorMix = mix(colorRight, colorLeft, percent);
-
-    colorMix.ga = vec2(0.0, alpha);
+//    vec4 colorRight = vec4(0.0289, 0.0, 0.05, 1.0);
+        
+//    vec4 colorLeft = vec4(0.0, 0.0, 0.0, 1.0);
+//    vec4 colorMix;
+    vec4 colorMix = vec4(0.0, 0.0, 0.0, alpha);
+////    colorMix = mix(colorRight, colorLeft, percent);
+//
+//    colorMix.ga = vec2(0.0, alpha);
     gl_FragColor = colorMix;
-    
-// From the original example
-//    float windowWidth = 1024.0;
-//    float windowHeight = 768.0;
-//	float r = gl_FragCoord.x;
-//	float g = 0.0;
-//	float b =  gl_FragCoord.y;
-//	float a = 1.0;
-//	gl_FragColor = mix(r, b, a);
     
 }

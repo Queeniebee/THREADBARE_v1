@@ -5,6 +5,7 @@ void ofApp::setup(){
     
     shader.load("shader.vert", "shader.frag");
     video.loadMovie("test_video/Resources/test_video.mov");
+    video.play();
     
 //    int width = video.getWidth();
 //    int height = video.getHeight();
@@ -59,15 +60,11 @@ void ofApp::update(){
 void ofApp::draw(){
     
     
-    ofSetColor(255);
-    
-    fbo.begin();
-    video.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
-    fbo.end();
-    fbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+//    ofSetColor(255);
     
     float secondSensor2;
     float time = 0.0;
+    
     if(ofGetElapsedTimef() >= 30.0){
         
         time = fmod(ofGetElapsedTimef(), 30)*0.079;
@@ -84,7 +81,7 @@ void ofApp::draw(){
 
     //This fbo is in draw because the "mask" is the shader of lerped colors
     //It is in this fbo where we will use the values from ofSerial
-    if(((secondSensor >= 100) && (secondSensor < 127)) || ((firstSensor >= 100) && (firstSensor < 127))){
+    if(((secondSensor >= 0) && (secondSensor < 100)) || ((firstSensor >= 0) && (firstSensor < 10))){
         secondSensor2 = 0.5;
     } else{
     
@@ -92,18 +89,26 @@ void ofApp::draw(){
     
     }
     maskFbo.begin();
-    
     shader.begin();
     shader.setUniform1f("percent", percent);
     shader.setUniform1f("alpha", secondSensor2);
     ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+
     shader.end();
     maskFbo.end();
     
+    fbo.begin();
+//    ofClear(0, 0, 0, 0);
+//    shader.begin();
+//    shader.setUniformTexture("maskTex", maskFbo.getTextureReference(), 1 );
+//    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+    video.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+//    shader.end();
+    fbo.end();
+    
+    fbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
     maskFbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
-    
 
-    
 }
 
 //--------------------------------------------------------------
