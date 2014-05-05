@@ -81,11 +81,11 @@ void ofApp::update(){
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
-    float time = 0.0;
+/*    float time = 0.0;
     if(ofGetElapsedTimef() >= 30.0){
         
         time = fmod(ofGetElapsedTimef(), 30)*0.079;
-//        cout<<"TIME2:  "<<time<<endl;
+        cout<<"TIME2:  "<<time<<endl;
         
     } else{
     
@@ -93,7 +93,7 @@ void ofApp::draw(){
     
     }
     float change = 0.076+10.0;
-    float percent = fmod(time,change);
+    float percent = fmod(time,change); */
 
 
 //    firstSensor = averageSensor1(firstSensor);
@@ -118,7 +118,7 @@ void ofApp::draw(){
     maskFbo.end();
     
     fbo.begin();
-//    ofClear(0, 0, 0, 0);
+    ofClear(0, 0, 0, 0);
     video.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
 //    shader.end();
     fbo.end();
@@ -156,41 +156,41 @@ int ofApp::averageSensor2(int sensorValue2[]){
 //--------------------------------------------------------------
 float ofApp::triggerFunction(int sensorValue, int sensorValue2){
 
-    float secondSensor2 = 0.0;
+    float alphaValue = 0.0;
     
-    if(((sensorValue2 >= 0) && (sensorValue2 < 10)) || ((sensorValue >= 0) && (sensorValue < 10))){
+    if(((sensorValue >= 0) && (sensorValue < 10)) || ((sensorValue2 >= 0) && (sensorValue2 < 10))){
         //The closer the person is, the clearer the picture
-        sensorValue2 = 0.0;
-        return secondSensor2;
+        alphaValue = 0.0;
+        return alphaValue;
 
         
         //Will add change between video clips
-    } else if (((sensorValue2 >= 10) && (sensorValue2 < 64)) || ((sensorValue >= 10) && (sensorValue < 25))){
+    } else if (((sensorValue >= 10) && (sensorValue < 64)) || ((sensorValue2 >= 10) && (sensorValue2 < 25))){
         
         sensorValue2 = 0.1;
-        return secondSensor2;
+        return alphaValue;
 
 
-    } else if (((sensorValue2 >= 64) && (sensorValue2 < 128)) || ((sensorValue >= 64) && (sensorValue < 128))){
-        sensorValue2 = 0.25;
-        return secondSensor2;
+    } else if (((sensorValue >= 64) && (sensorValue < 128)) || ((sensorValue2 >= 64) && (sensorValue2 < 128))){
+        alphaValue = 0.25;
+        return alphaValue;
 
 
     
-    } else if (((sensorValue2 >= 128) && (sensorValue2 < 192)) || ((sensorValue >= 128) && (sensorValue < 192))){
-        sensorValue2 = 0.3;
-        return secondSensor2;
+    } else if (((sensorValue >= 128) && (sensorValue < 192)) || ((sensorValue2 >= 128) && (sensorValue2 < 192))){
+        alphaValue = 0.3;
+        return alphaValue;
 
 
         
-    } else if (((sensorValue2 >= 192) && (sensorValue2 < 256)) || ((sensorValue >= 192) && (sensorValue < 256))){
-        sensorValue2 = 0.4;
-        return secondSensor2;
+    } else if (((sensorValue >= 192) && (sensorValue < 256)) || ((sensorValue2 >= 192) && (sensorValue2 < 256))){
+        alphaValue = 0.4;
+        return alphaValue;
 
     } else{
         
-        secondSensor2 = 0.5;
-        return secondSensor2;
+        alphaValue = 0.9;
+        return alphaValue;
 
     }
         
