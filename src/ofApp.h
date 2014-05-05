@@ -25,7 +25,10 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    float averageSensors(int sensorValue1, int sensorValue2);
+    //Splitting up the averageSensor function into 2 because not enough
+    // time to configure a struct or return a pair
+    int averageSensor1(int sensorValue[]);
+    int averageSensor2(int sensorValue2[]);
     float triggerFunction(int sensorValue1, int sensorValue2);
     
     ofShader shader;
@@ -34,4 +37,6 @@ public:
     
     ofSerial serial;
     int firstSensor[NUM_AVG], secondSensor[NUM_AVG];
+    int somevalue, somevalue2;
+
 };
