@@ -40,7 +40,7 @@ void ofApp::update(){
             Result = serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
             
             if(bytesReturned[Result] == '1'){
-            firstSensor = bytesReturned[Result-1];
+            firstSensor[] = bytesReturned[Result-1];
             cout<<"FirstSensor: "<<firstSensor<<endl;
         }
         if(bytesReturned[Result] == '2'){
@@ -58,11 +58,6 @@ void ofApp::update(){
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
-    
-    
-//    ofSetColor(255);
-    
-    float secondSensor2;
     float time = 0.0;
     
     if(ofGetElapsedTimef() >= 30.0){
@@ -78,20 +73,16 @@ void ofApp::draw(){
     float change = 0.076+10.0;
     float percent = fmod(time,change);
     
+    float sensorValue;
+    sensorValue = triggerFunction(firstSensor, secondSensor);
 
     //This fbo is in draw because the "mask" is the shader of lerped colors
     //It is in this fbo where we will use the values from ofSerial
-    if(((secondSensor >= 0) && (secondSensor < 100)) || ((firstSensor >= 0) && (firstSensor < 10))){
-        secondSensor2 = 0.5;
-    } else{
-    
-        secondSensor2 = 0.3;
-    
-    }
+
     maskFbo.begin();
     shader.begin();
     shader.setUniform1f("percent", percent);
-    shader.setUniform1f("alpha", secondSensor2);
+    shader.setUniform1f("alpha", sensorValue);
     ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
 
     shader.end();
@@ -120,6 +111,45 @@ void ofApp::keyPressed(int key){
     }
 }
 
+//--------------------------------------------------------------
+float ofApp::averageSensors(int sensorValue1, int sensorValue2){
+    
+    
+    
+}
+//--------------------------------------------------------------
+float ofApp::triggerFunction(int sensorValue, int sensorValue2){
+
+    float secondSensor2;
+    
+    if(((sensorValue2 >= 0) && (sensorValue2 < 10)) || ((sensorValue >= 0) && (sensorValue < 10))){
+        //The closer the person is, the clearer the picture
+        sensorValue2 = 0.0;
+        
+        //Will add change between video clips
+    } else if (((sensorValue2 >= 10) && (sensorValue2 < 64)) || ((sensorValue >= 10) && (sensorValue < 25))){
+        
+        sensorValue2 = 0.1;
+
+    } else if (((sensorValue2 >= 64) && (sensorValue2 < 128)) || ((sensorValue >= 64) && (sensorValue < 128))){
+        sensorValue2 = 0.25;
+
+    
+    } else if (((sensorValue2 >= 128) && (sensorValue2 < 192)) || ((sensorValue >= 128) && (sensorValue < 192))){
+        sensorValue2 = 0.3;
+
+        
+    } else if (((sensorValue2 >= 192) && (sensorValue2 < 256)) || ((sensorValue >= 192) && (sensorValue < 256))){
+        sensorValue2 = 0.4;
+    
+    } else{
+        
+        secondSensor2 = 1.0;
+    }
+    
+    return secondSensor2;
+    
+}
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     

@@ -3,7 +3,7 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #define GLFW_EXPOSE_NATIVE_NSGL
 
-#define NUM_CLIPS 4
+#define NUM_AVG 5
 
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
@@ -25,10 +25,13 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    float averageSensors(int sensorValue1, int sensorValue2);
+    float triggerFunction(int sensorValue1, int sensorValue2);
+    
     ofShader shader;
     ofVideoPlayer video;
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
-    int firstSensor, secondSensor = 0;
+    int firstSensor[NUM_AVG], secondSensor[NUM_AVG];
 };
