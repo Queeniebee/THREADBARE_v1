@@ -135,8 +135,8 @@ int ofApp::averageSensor2(int sensorValue2[]){
 //--------------------------------------------------------------
 float ofApp::triggerFunction(int sensorValue, int sensorValue2){
 
-    float alphaValue = 0.0;
-    
+    float alphaValue = 1.0;
+
     if(((sensorValue >= 0) && (sensorValue < 10)) || ((sensorValue2 >= 0) && (sensorValue2 < 10))){
         //The closer the person is, the clearer the picture
         alphaValue = 0.0;
@@ -146,18 +146,18 @@ float ofApp::triggerFunction(int sensorValue, int sensorValue2){
         //Will add change between video clips
     } else if (((sensorValue >= 10) && (sensorValue < 64)) || ((sensorValue2 >= 10) && (sensorValue2 < 25))){
         
-        alphaValue = 0.25;
+        alphaValue = 0.35;
         return alphaValue;
 
 
     } else if (((sensorValue >= 64) && (sensorValue < 128)) || ((sensorValue2 >= 64) && (sensorValue2 < 128))){
-        alphaValue = 0.5;
+        alphaValue = 0.70;
         return alphaValue;
 
 
     
     } else if (((sensorValue >= 128) && (sensorValue < 192)) || ((sensorValue2 >= 128) && (sensorValue2 < 192))){
-        alphaValue = 0.75;
+        alphaValue = 0.85;
         return alphaValue;
 
 
@@ -168,7 +168,7 @@ float ofApp::triggerFunction(int sensorValue, int sensorValue2){
 
     } else{
         
-        alphaValue = 0.9;
+//        alphaValue = 1.0;
         return alphaValue;
 
     }
