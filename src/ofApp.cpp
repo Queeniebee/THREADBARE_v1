@@ -23,40 +23,86 @@ void ofApp::setup(){
 
     serial.enumerateDevices();
     serial.setup(0,9600);
+//    serial.setup("/dev/tty.usbmodemfa131",9600);
+//    serial.startContinuousRead(true);
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+   /* {
+    ofAddListener(serial.NEW_MESSAGE,this,&ofApp::onNewMessage);
+	message = "";    
+    cout << "sendRequest\n";
+    serial.sendRequest();}*/
+    shaderValue = 0;
+
     int bytesRequired = 5;
     unsigned char bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
+    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int Result = 0;
     cout<<"firstSensor before: "<<firstSensor<<endl;
 
-    // This is a good serial read formula
-    while(bytesRemaining > 0){
         if(serial.available() > 0){
-            int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-            Result = serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
-                if(bytesReturned[Result] == '1'){
-                    firstSensor = bytesReturned[Result-1];
+            serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
+            if(bytesReturned[4] == 'z'){
+                if(bytesReturned[0] == '1'){
+                    firstSensor = bytesReturned[1];
                     cout<<"firstSensor after1: "<<firstSensor<<endl;
                 
                 }
-                if(bytesReturned[Result] == '2'){
-                    secondSensor = bytesReturned[Result-1];
+                if(bytesReturned[2] == '2'){
+                    secondSensor = bytesReturned[3];
                     cout<<"secondSensor after1: "<<secondSensor<<endl;
 
             }
-            bytesRemaining -= Result;
+            }
+            
+//            bytesRemaining -= Result;
             serial.flush();
             serial.writeByte('A');
-    
-        }
         }
 
     video.update();
+    cout<<"FirstSensor: "<<firstSensor<<endl;
+    cout<<"SecondSensor: "<<secondSensor<<endl;
+    shaderValue = triggerFunction(firstSensor, secondSensor);
+    cout<<"shaderValue: "<<shaderValue<<endl;
+    
+//    maskFbo.begin();
+//    shader.begin();
+//    //    shader.setUniform1f("percent", percent);
+//    shader.setUniform1f("alpha", shaderValue);
+//    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+//    
+//    shader.end();
+//    maskFbo.end();
+
+}
+//--------------------------------------------------------------
+void ofApp::onNewMessage(string &message){
+    
+//    vector<string> input = ofSplitString(message, ",");
+//    string firstOne, secondOne;
+//	if(input.size() >= 3)
+//	{
+//        firstOne = input.at(0).c_str();
+//        secondOne = input.at(2).c_str();
+//	}
+//    
+//    firstSensor = stringToInt(firstOne);
+//    secondSensor = stringToInt(secondOne);
+
+    
+}
+//--------------------------------------------------------------
+int ofApp::stringToInt(const string &Text){
+    
+    stringstream convert(Text);
+    int result;
+    return convert >> result ? result : 0;
+
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
@@ -78,16 +124,18 @@ void ofApp::draw(){
 //    firstSensor = averageSensor1(firstSensor);
 //    secondSensor = averageSensor2(secondSensor);
     
-
-    float shaderValue;
-    shaderValue = triggerFunction(firstSensor, secondSensor);
-    cout<<"sensorValue: "<<shaderValue<<endl;
+//    cout<<"FirstSensor: "<<firstSensor<<endl;
+//    cout<<"SecondSensor: "<<secondSensor<<endl;
+//    float shaderValue;
+//    shaderValue = triggerFunction(firstSensor, secondSensor);
+//    cout<<"sensorValue: "<<shaderValue<<endl;
 
 
     //This fbo is in draw because the "mask" is the shader of lerped colors
     //It is in this fbo where we will use the values from ofSerial
 
     maskFbo.begin();
+    ofClear(0, 0, 0, 0);
     shader.begin();
 //    shader.setUniform1f("percent", percent);
     shader.setUniform1f("alpha", shaderValue);
@@ -98,12 +146,11 @@ void ofApp::draw(){
     
     fbo.begin();
     ofClear(0, 0, 0, 0);
-    video.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
-//    shader.end();
+    video.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     fbo.end();
     
-    fbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
-    maskFbo.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
+    fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    maskFbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
 
 }
 
@@ -137,7 +184,7 @@ float ofApp::triggerFunction(int sensorValue, int sensorValue2){
 
     float alphaValue = 1.0;
 
-    if(((sensorValue >= 0) && (sensorValue < 10)) || ((sensorValue2 >= 0) && (sensorValue2 < 10))){
+    if(((sensorValue >= 1) && (sensorValue < 10)) || ((sensorValue2 >= 0) && (sensorValue2 < 10))){
         //The closer the person is, the clearer the picture
         alphaValue = 0.0;
         return alphaValue;

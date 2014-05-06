@@ -8,6 +8,9 @@
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
 #include "GLFW/glfw3native.h"
+#include "ofxSimpleSerial.h"
+#include <vector>
+#include "ofUtils.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -29,6 +32,7 @@ public:
     // time to configure a struct or return a pair
     int averageSensor1(int sensorValue[]);
     int averageSensor2(int sensorValue2[]);
+    void onNewMessage(string & message);
     float triggerFunction(int sensorValue1, int sensorValue2);
     
     ofShader shader;
@@ -36,7 +40,12 @@ public:
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
+    string message;
+    
+    int stringToInt(const string &Text);
     int firstSensor, secondSensor;
     int somevalue, somevalue2;
+    float shaderValue;
+
 
 };
