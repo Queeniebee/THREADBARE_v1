@@ -159,7 +159,6 @@ void ofApp::keyPressed(int key){
     if(key == 'D'){
         
         ofToggleFullscreen();
-        
     }
 }
 
