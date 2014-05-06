@@ -36,7 +36,9 @@ public:
     float triggerFunction(int sensorValue1, int sensorValue2);
     
     ofShader shader;
-    ofVideoPlayer video;
+    ofVideoPlayer video[NUM_AVG];
+    string paths[NUM_AVG];
+
     ofFbo fbo, maskFbo;
     
     ofSerial serial;

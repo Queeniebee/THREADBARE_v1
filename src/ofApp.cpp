@@ -4,8 +4,32 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
     shader.load("shader.vert", "shader.frag");
-    video.loadMovie("test_video/Resources/test_video.mov");
-    video.play();
+//    video.loadMovie("test_video/Resources/test_video.mov");
+//    video.play();
+    
+    paths[0] = "THREABARE_v2/Resources/THREABARE_v2.mov";
+    paths[1] = "THREADBARE_v3/Resources/THREADBARE_v3.mov";
+    paths[2] = "THREADBARE_v42/Resources/THREADBARE_v42.mov";
+    paths[3] = "THREADBARE_v52/Resources/THREADBARE_v52.mov";
+    paths[4] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
+    
+    for(int i = 0; i < NUM_AVG; i++){
+        video[i].loadMovie(paths[i]);
+        video[i].play();
+    }
+  /*
+    video[0].loadMovie(paths[0]);
+    video[1].loadMovie(paths[1]);
+    video[2].loadMovie(paths[2]);
+    video[3].loadMovie(paths[3]);
+    video[4].loadMovie(paths[4]);
+    
+    video[0].play();
+    video[1].play();
+    video[2].play();
+    video[3].play();
+    video[4].play();
+*/
     
 //    int width = video.getWidth();
 //    int height = video.getHeight();
@@ -64,7 +88,9 @@ void ofApp::update(){
             serial.writeByte('A');
         }
 
-    video.update();
+    for (int i = 0; i < NUM_AVG; i++) {
+		video[i].update();
+	}
     cout<<"FirstSensor: "<<firstSensor<<endl;
     cout<<"SecondSensor: "<<secondSensor<<endl;
     shaderValue = triggerFunction(firstSensor, secondSensor);
@@ -133,7 +159,6 @@ void ofApp::draw(){
 
     //This fbo is in draw because the "mask" is the shader of lerped colors
     //It is in this fbo where we will use the values from ofSerial
-
     maskFbo.begin();
     ofClear(0, 0, 0, 0);
     shader.begin();
@@ -143,11 +168,83 @@ void ofApp::draw(){
 
     shader.end();
     maskFbo.end();
-    
+
+//    fbo.begin();
+//    ofClear(0, 0, 0, 0);
+    int oldShaderValue = 0;
+    int cue = 0;
+  /*  if (shaderValue == 0.35) {
+        cue = 0;
+        fbo.begin();
+        ofClear(0, 0, 0, 0);
+        video[0].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+        fbo.end();
+        cout<<"cue: "<<cue<<endl;
+    } else if (shaderValue == 0.7){
+        cue = 1;
+        fbo.begin();
+        ofClear(0, 0, 0, 0);
+        video[1].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+        fbo.end();
+        cout<<"cue: "<<cue<<endl;
+
+    } else if (shaderValue == 0.85){
+        cue = 2;
+        fbo.begin();
+        ofClear(0, 0, 0, 0);
+        video[2].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+        fbo.end();
+        cout<<"cue: "<<cue<<endl;
+
+    } else if (shaderValue == 1.0){
+        cue = 3;
+        fbo.begin();
+        ofClear(0, 0, 0, 0);
+        video[3].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+        fbo.end();
+        cout<<"cue: "<<cue<<endl;
+
+    } else {
+        cue = 4;
+        fbo.begin();
+        ofClear(0, 0, 0, 0);
+        video[4].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+        fbo.end();
+        cout<<"cue: "<<cue<<endl;
+
+        
+    } */
+    if(oldShaderValue != shaderValue){
+        oldShaderValue = shaderValue;
+
+    if (oldShaderValue == 0.35) {
+     cue = 0;
+     cout<<"cue: "<<cue<<endl;
+     } else if (oldShaderValue == 0.7){
+     cue = 1;
+     cout<<"cue: "<<cue<<endl;
+     
+     } else if (oldShaderValue == 0.85){
+     cue = 2;
+     cout<<"cue: "<<cue<<endl;
+     
+     } else if (oldShaderValue == 1.0){
+     cue = 3;
+     cout<<"cue: "<<cue<<endl;
+     
+     } else {
+     cue = 4;
+     cout<<"cue: "<<cue<<endl;
+     }
+    }
     fbo.begin();
     ofClear(0, 0, 0, 0);
-    video.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    video[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     fbo.end();
+    
+//    video[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+//    fbo.end();
+//    cout<<"cue: "<<cue<<endl;
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     maskFbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
