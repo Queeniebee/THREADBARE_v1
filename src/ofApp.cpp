@@ -7,6 +7,9 @@ void ofApp::setup(){
 //    video.loadMovie("test_video/Resources/test_video.mov");
 //    video.play();
     
+    videoSound.loadSound("Threadbare_voiceover.mp3");
+    videoSound.setVolume(0.8f);
+    
     paths[0] = "THREABARE_v2/Resources/THREABARE_v2.mov";
     paths[1] = "THREADBARE_v3/Resources/THREADBARE_v3.mov";
     paths[2] = "THREADBARE_v42/Resources/THREADBARE_v42.mov";
@@ -16,6 +19,8 @@ void ofApp::setup(){
     for(int i = 0; i < NUM_AVG; i++){
         video[i].loadMovie(paths[i]);
         video[i].play();
+        video[i].setVolume(0.0f);
+
     }
   /*
     video[0].loadMovie(paths[0]);

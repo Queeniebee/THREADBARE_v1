@@ -37,6 +37,7 @@ public:
     
     ofShader shader;
     ofVideoPlayer video[NUM_AVG];
+    ofSoundPlayer videoSound;
     string paths[NUM_AVG];
 
     ofFbo fbo, maskFbo;
