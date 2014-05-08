@@ -4,6 +4,7 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
     shader.load("shader.vert", "shader.frag");
+//    shader2.load("shader2.vert", "shader2.frag");
 //    video.loadMovie("test_video/Resources/test_video.mov");
 //    video.play();
     
@@ -13,8 +14,18 @@ void ofApp::setup(){
     paths[0] = "THREABARE_v2/Resources/THREABARE_v2.mov";
     paths[1] = "THREADBARE_v3/Resources/THREADBARE_v3.mov";
     paths[2] = "THREADBARE_v42/Resources/THREADBARE_v42.mov";
-    paths[3] = "THREADBARE_v52/Resources/THREADBARE_v52.mov";
+    paths[3] = "THREADBARE_replacev52/Resources/THREADBARE_replacev52.mov";
     paths[4] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
+    paths[5] = "THREADBARE_v7/Resources/THREADBARE_v7.mov";
+    paths[6] = "THREADBARE_v9_c/Resources/THREADBARE_v9_c.mov";
+    paths[7] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
+    paths[8] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
+    paths[9] = "THREADBARE_shoes1/Resources/THREADBARE_shoes1.mov";
+    paths[10] = "THREADBARE_shoes3/Resources/THREADBARE_shoes3.mov";
+    paths[10] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
+    paths[12] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
+
+
     
     for(int i = 0; i < NUM_AVG; i++){
         video[i].loadMovie(paths[i]);
@@ -22,6 +33,7 @@ void ofApp::setup(){
         video[i].setVolume(0.0f);
 
     }
+        videoSound.play();
   /*
     video[0].loadMovie(paths[0]);
     video[1].loadMovie(paths[1]);
@@ -52,18 +64,11 @@ void ofApp::setup(){
 
     serial.enumerateDevices();
     serial.setup(0,9600);
-//    serial.setup("/dev/tty.usbmodemfa131",9600);
-//    serial.startContinuousRead(true);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-   /* {
-    ofAddListener(serial.NEW_MESSAGE,this,&ofApp::onNewMessage);
-	message = "";    
-    cout << "sendRequest\n";
-    serial.sendRequest();}*/
     shaderValue = 0;
 
     int bytesRequired = 5;
@@ -87,8 +92,6 @@ void ofApp::update(){
 
             }
             }
-            
-//            bytesRemaining -= Result;
             serial.flush();
             serial.writeByte('A');
         }
@@ -100,15 +103,6 @@ void ofApp::update(){
     cout<<"SecondSensor: "<<secondSensor<<endl;
     shaderValue = triggerFunction(firstSensor, secondSensor);
     cout<<"shaderValue: "<<shaderValue<<endl;
-    
-//    maskFbo.begin();
-//    shader.begin();
-//    //    shader.setUniform1f("percent", percent);
-//    shader.setUniform1f("alpha", shaderValue);
-//    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
-//    
-//    shader.end();
-//    maskFbo.end();
 
 }
 //--------------------------------------------------------------
@@ -167,7 +161,7 @@ void ofApp::draw(){
     maskFbo.begin();
     ofClear(0, 0, 0, 0);
     shader.begin();
-//    shader.setUniform1f("percent", percent);
+//    shader2.setUniform1f("percent", percent);
     shader.setUniform1f("alpha", shaderValue);
     ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
 
@@ -178,47 +172,6 @@ void ofApp::draw(){
 //    ofClear(0, 0, 0, 0);
     int oldShaderValue = 0;
     int cue = 0;
-  /*  if (shaderValue == 0.35) {
-        cue = 0;
-        fbo.begin();
-        ofClear(0, 0, 0, 0);
-        video[0].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-        fbo.end();
-        cout<<"cue: "<<cue<<endl;
-    } else if (shaderValue == 0.7){
-        cue = 1;
-        fbo.begin();
-        ofClear(0, 0, 0, 0);
-        video[1].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-        fbo.end();
-        cout<<"cue: "<<cue<<endl;
-
-    } else if (shaderValue == 0.85){
-        cue = 2;
-        fbo.begin();
-        ofClear(0, 0, 0, 0);
-        video[2].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-        fbo.end();
-        cout<<"cue: "<<cue<<endl;
-
-    } else if (shaderValue == 1.0){
-        cue = 3;
-        fbo.begin();
-        ofClear(0, 0, 0, 0);
-        video[3].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-        fbo.end();
-        cout<<"cue: "<<cue<<endl;
-
-    } else {
-        cue = 4;
-        fbo.begin();
-        ofClear(0, 0, 0, 0);
-        video[4].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-        fbo.end();
-        cout<<"cue: "<<cue<<endl;
-
-        
-    } */
     if(oldShaderValue != shaderValue){
         oldShaderValue = shaderValue;
 
@@ -246,10 +199,6 @@ void ofApp::draw(){
     ofClear(0, 0, 0, 0);
     video[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     fbo.end();
-    
-//    video[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-//    fbo.end();
-//    cout<<"cue: "<<cue<<endl;
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     maskFbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());

@@ -35,7 +35,7 @@ public:
     void onNewMessage(string & message);
     float triggerFunction(int sensorValue1, int sensorValue2);
     
-    ofShader shader;
+    ofShader shader, shader2;
     ofVideoPlayer video[NUM_AVG];
     ofSoundPlayer videoSound;
     string paths[NUM_AVG];
