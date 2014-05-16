@@ -8,10 +8,10 @@
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
 #include "GLFW/glfw3native.h"
+#include "ofQTKitPlayer.h"
 #include "ofxSimpleSerial.h"
 #include <vector>
 #include "ofUtils.h"
-#include "ofQTKitPlayer.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -43,8 +43,7 @@ public:
     string paths[NUM_CLIPS];
 //    ofPtr<ofVideoPlayer>video;
 
-//    ofPtr<ofQTKitPlayer>clips;
-    ofQTKitPlayer *clips;
+    ofQTKitPlayer *clipsPointer;
     ofQTKitPlayer video;
     ofFbo fbo, maskFbo;
     
