@@ -3,7 +3,7 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #define GLFW_EXPOSE_NATIVE_NSGL
 
-#define NUM_AVG 5
+#define NUM_CLIPS 12
 
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
@@ -35,19 +35,22 @@ public:
     void onNewMessage(string & message);
     float triggerFunction(int sensorValue1, int sensorValue2);
     
-    ofShader shader, shader2;
-    ofVideoPlayer video[NUM_AVG];
+//    ofShader shader, shader2;
+//    ofVideoPlayer video[NUM_CLIPS];
+
     ofSoundPlayer videoSound;
-    string paths[NUM_AVG];
+    string paths[NUM_CLIPS];
+    ofPtr<ofVideoPlayer>video;
 
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
     string message;
-    
+    int oldShaderValue;
     int stringToInt(const string &Text);
     int firstSensor, secondSensor;
     int somevalue, somevalue2;
+    int cue;
     float shaderValue;
 
 

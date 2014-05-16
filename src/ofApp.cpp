@@ -3,60 +3,30 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    shader.load("shader.vert", "shader.frag");
-//    shader2.load("shader2.vert", "shader2.frag");
-//    video.loadMovie("test_video/Resources/test_video.mov");
-//    video.play();
+    oldShaderValue = 0;
+    paths[0] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
+    paths[1] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
+    paths[2] = "THREADBARE_replacev52/Resources/THREADBARE_replacev52.mov";
+    paths[3] = "THREADBARE_shoes3/Resources/THREADBARE_shoes3.mov";
+    paths[4] = "THREADBARE_v9_c/Resources/THREADBARE_v9_c.mov"; 
+    paths[5] = "THREADBARE_shoes1/Resources/THREADBARE_shoes1.mov";
+    paths[6] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
+    paths[7] = "THREADBARE_v7/Resources/THREADBARE_v7.mov"; 
+    paths[8] = "THREADBARE_v6/Resources/THREADBARE_v6.mov"; 
+    paths[9] = "THREADBARE_v42/Resources/THREADBARE_v42.mov"; 
+    paths[10] = "THREABARE_v2/Resources/THREABARE_v2.mov";
+    paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
     
     videoSound.loadSound("Threadbare_voiceover.mp3");
     videoSound.setVolume(0.8f);
-    
-    paths[0] = "THREABARE_v2/Resources/THREABARE_v2.mov";
-    paths[1] = "THREADBARE_v3/Resources/THREADBARE_v3.mov";
-    paths[2] = "THREADBARE_v42/Resources/THREADBARE_v42.mov";
-    paths[3] = "THREADBARE_replacev52/Resources/THREADBARE_replacev52.mov";
-    paths[4] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
-    paths[5] = "THREADBARE_v7/Resources/THREADBARE_v7.mov";
-    paths[6] = "THREADBARE_v9_c/Resources/THREADBARE_v9_c.mov";
-    paths[7] = "THREADBARE_v6/Resources/THREADBARE_v6.mov";
-    paths[8] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
-    paths[9] = "THREADBARE_shoes1/Resources/THREADBARE_shoes1.mov";
-    paths[10] = "THREADBARE_shoes3/Resources/THREADBARE_shoes3.mov";
-    paths[10] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
-    paths[12] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
+    videoSound.play();
 
-
+    video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+    video->loadMovie(paths[0]);
+    video->setVolume(0.0f);
+    video->play();
     
-    for(int i = 0; i < NUM_AVG; i++){
-        video[i].loadMovie(paths[i]);
-        video[i].play();
-        video[i].setVolume(0.0f);
-
-    }
-        videoSound.play();
-  /*
-    video[0].loadMovie(paths[0]);
-    video[1].loadMovie(paths[1]);
-    video[2].loadMovie(paths[2]);
-    video[3].loadMovie(paths[3]);
-    video[4].loadMovie(paths[4]);
-    
-    video[0].play();
-    video[1].play();
-    video[2].play();
-    video[3].play();
-    video[4].play();
-*/
-    
-//    int width = video.getWidth();
-//    int height = video.getHeight();
-    
-    maskFbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
-    
-    maskFbo.begin();
-    ofClear(0,0,0,255);
-    maskFbo.end();
     
     fbo.begin();
     ofClear(0,0,0,255);
@@ -69,40 +39,178 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    shaderValue = 0;
+
+    video->update();
 
     int bytesRequired = 5;
     unsigned char bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int Result = 0;
-    cout<<"firstSensor before: "<<firstSensor<<endl;
+    if (fmod(ofGetElapsedTimef(), 15)){
 
         if(serial.available() > 0){
             serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
             if(bytesReturned[4] == 'z'){
                 if(bytesReturned[0] == '1'){
                     firstSensor = bytesReturned[1];
-                    cout<<"firstSensor after1: "<<firstSensor<<endl;
+//                    cout<<"firstSensor after1: "<<firstSensor<<endl;
                 
                 }
                 if(bytesReturned[2] == '2'){
                     secondSensor = bytesReturned[3];
-                    cout<<"secondSensor after1: "<<secondSensor<<endl;
+//                    cout<<"secondSensor after1: "<<secondSensor<<endl;
 
             }
             }
             serial.flush();
             serial.writeByte('A');
         }
+    }
+    shaderValue = triggerFunction(firstSensor, secondSensor);
+//    cout<<"shaderValue: "<<shaderValue<<endl;
+    
 
-    for (int i = 0; i < NUM_AVG; i++) {
-		video[i].update();
-	}
+    int cue;
+    if(oldShaderValue != shaderValue){
+        cout<<"Update Value"<<endl;
+        oldShaderValue = shaderValue;
+        if (oldShaderValue == 0.08){
+            cue = 1;
+            video->stop();
+            video->close();
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.16){
+            cue = 2;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.24){
+            cue = 3;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.32){
+            cue = 4;
+            video->stop();
+            video->close();
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.40){
+            cue = 5;
+            video->stop();
+            video->close();
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if(oldShaderValue == 0.48){
+            cue = 6;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+        } else if (oldShaderValue == 0.56){
+            cue = 7;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.64){
+            cue = 8;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.72){
+            cue = 9;
+            video->stop();
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+            
+        } else if (oldShaderValue == 0.8){
+            cue = 10;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+        } else if (oldShaderValue == 1.0){
+            cue = 11;
+            video->stop();
+            video->close();            
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+            cout<<"cue: "<<cue<<endl;
+        } else {
+            cue = 0;
+            video->stop();
+            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            video->loadMovie(paths[cue]);
+            video->setVolume(0.0f);
+            video->play();
+
+        }
+        
+    } else{
+    
+        cout<<"shadervalue is the same: "<<shaderValue<<endl;
+    
+    }
+
+
     cout<<"FirstSensor: "<<firstSensor<<endl;
     cout<<"SecondSensor: "<<secondSensor<<endl;
-    shaderValue = triggerFunction(firstSensor, secondSensor);
-    cout<<"shaderValue: "<<shaderValue<<endl;
 
 }
 //--------------------------------------------------------------
@@ -144,10 +252,6 @@ void ofApp::draw(){
     }
     float change = 0.076+10.0;
     float percent = fmod(time,change); */
-
-
-//    firstSensor = averageSensor1(firstSensor);
-//    secondSensor = averageSensor2(secondSensor);
     
 //    cout<<"FirstSensor: "<<firstSensor<<endl;
 //    cout<<"SecondSensor: "<<secondSensor<<endl;
@@ -158,50 +262,25 @@ void ofApp::draw(){
 
     //This fbo is in draw because the "mask" is the shader of lerped colors
     //It is in this fbo where we will use the values from ofSerial
-    maskFbo.begin();
-    ofClear(0, 0, 0, 0);
-    shader.begin();
-//    shader2.setUniform1f("percent", percent);
-    shader.setUniform1f("alpha", shaderValue);
-    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
-
-    shader.end();
-    maskFbo.end();
-
-//    fbo.begin();
+//    maskFbo.begin();
 //    ofClear(0, 0, 0, 0);
-    int oldShaderValue = 0;
-    int cue = 0;
-    if(oldShaderValue != shaderValue){
-        oldShaderValue = shaderValue;
+//    shader.begin();
+////    shader2.setUniform1f("percent", percent);
+//    shader.setUniform1f("alpha", shaderValue);
+//    ofRect(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+//
+//    shader.end();
+//    maskFbo.end();
 
-    if (oldShaderValue == 0.35) {
-     cue = 0;
-     cout<<"cue: "<<cue<<endl;
-     } else if (oldShaderValue == 0.7){
-     cue = 1;
-     cout<<"cue: "<<cue<<endl;
-     
-     } else if (oldShaderValue == 0.85){
-     cue = 2;
-     cout<<"cue: "<<cue<<endl;
-     
-     } else if (oldShaderValue == 1.0){
-     cue = 3;
-     cout<<"cue: "<<cue<<endl;
-     
-     } else {
-     cue = 4;
-     cout<<"cue: "<<cue<<endl;
-     }
-    }
+    
     fbo.begin();
     ofClear(0, 0, 0, 0);
-    video[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    video->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    cout<<"cue: "<<cue<<endl;
     fbo.end();
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-    maskFbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+//    maskFbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
 
 }
 
@@ -216,58 +295,75 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 int ofApp::averageSensor1(int sensorValue1[]){
     int returnValue = 0;
-    for(int i = 0; i < NUM_AVG; i++){
+    for(int i = 0; i < NUM_CLIPS; i++){
         returnValue += sensorValue1[i];
     }
-    return returnValue / NUM_AVG;
+    return returnValue / NUM_CLIPS;
 }
 //--------------------------------------------------------------
 int ofApp::averageSensor2(int sensorValue2[]){
     int returnValue = 0;
-    for(int i = 0; i < NUM_AVG; i++){
+    for(int i = 0; i < NUM_CLIPS; i++){
         returnValue += sensorValue2[i];
     } 
-        return returnValue / NUM_AVG;
+        return returnValue / NUM_CLIPS;
 }
 //--------------------------------------------------------------
 float ofApp::triggerFunction(int sensorValue, int sensorValue2){
-
+// WILL REPLACE THESE IF STATEMENTS WITH MODULO
+    
     float alphaValue = 1.0;
 
-    if(((sensorValue >= 1) && (sensorValue < 10)) || ((sensorValue2 >= 0) && (sensorValue2 < 10))){
-        //The closer the person is, the clearer the picture
+    if(((sensorValue >= 1) && (sensorValue < 20)) || ((sensorValue2 >= 1) && (sensorValue2 < 20))){
         alphaValue = 0.0;
         return alphaValue;
 
+    } else if (((sensorValue >= 20) && (sensorValue < 36)) || ((sensorValue2 >= 20) && (sensorValue2 < 36))){
         
-        //Will add change between video clips
-    } else if (((sensorValue >= 10) && (sensorValue < 64)) || ((sensorValue2 >= 10) && (sensorValue2 < 25))){
-        
-        alphaValue = 0.35;
+        alphaValue = 0.08;
         return alphaValue;
 
-
-    } else if (((sensorValue >= 64) && (sensorValue < 128)) || ((sensorValue2 >= 64) && (sensorValue2 < 128))){
-        alphaValue = 0.70;
+    } else if (((sensorValue >= 36) && (sensorValue < 52)) || ((sensorValue2 >= 36) && (sensorValue2 < 52))){
+        alphaValue = 0.16;
         return alphaValue;
 
-
-    
-    } else if (((sensorValue >= 128) && (sensorValue < 192)) || ((sensorValue2 >= 128) && (sensorValue2 < 192))){
-        alphaValue = 0.85;
+    } else if (((sensorValue >= 52) && (sensorValue < 68)) || ((sensorValue2 >= 52) && (sensorValue2 < 68))){
+        alphaValue = 0.24;
         return alphaValue;
-
-
         
-    } else if (((sensorValue >= 192) && (sensorValue < 256)) || ((sensorValue2 >= 192) && (sensorValue2 < 256))){
+    } else if (((sensorValue >= 68) && (sensorValue < 84)) || ((sensorValue2 >= 68) && (sensorValue2 < 84))){
+        alphaValue = 0.32;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 84) && (sensorValue < 100)) || ((sensorValue2 >= 84) && (sensorValue2 < 100))){
+        alphaValue = 0.4;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 100) && (sensorValue < 116)) || ((sensorValue2 >= 100) && (sensorValue2 < 116))){
+        alphaValue = 0.48;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 116) && (sensorValue < 142)) || ((sensorValue2 >= 116) && (sensorValue2 < 142))){
+        alphaValue = 0.56;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 142) && (sensorValue < 168)) || ((sensorValue2 >= 142) && (sensorValue2 < 168))){
+        alphaValue = 0.64;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 168) && (sensorValue < 182)) || ((sensorValue2 >= 168) && (sensorValue2 < 182))){
+        alphaValue = 0.72;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 182) && (sensorValue < 228)) || ((sensorValue2 >= 182) && (sensorValue2 < 228))){
+        alphaValue = 0.8;
+        return alphaValue;
+        
+    } else if (((sensorValue >= 228) && (sensorValue < 246)) || ((sensorValue2 >= 228) && (sensorValue2 < 246))){
         alphaValue = 1.0;
         return alphaValue;
-
     } else{
-        
-//        alphaValue = 1.0;
         return alphaValue;
-
     }
         
 }
