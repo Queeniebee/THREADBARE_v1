@@ -20,9 +20,7 @@ void ofApp::setup(){
     clips->setPixelFormat(OF_PIXELS_RGBA);
     ofQTKitDecodeMode decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
     clips = ofPtr<ofQTKitPlayer>(new ofQTKitPlayer);
-    
-    
-    
+
     videoSound.loadSound("Threadbare_voiceover.mp3");
     videoSound.setVolume(0.8f);
     videoSound.play();
@@ -89,128 +87,128 @@ void ofApp::update(){
         oldShaderValue = shaderValue;
         if (oldShaderValue == 0.08){
             cue = 1;
-            video->stop();
-            video->close();
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();
+            clips =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.16){
             cue = 2;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.24){
             cue = 3;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.32){
             cue = 4;
-            video->stop();
-            video->close();
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();
+            clips =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.40){
             cue = 5;
-            video->stop();
-            video->close();
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();
+            clips =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if(oldShaderValue == 0.48){
             cue = 6;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
         } else if (oldShaderValue == 0.56){
             cue = 7;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.64){
             cue = 8;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.72){
             cue = 9;
-            video->stop();
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.8){
             cue = 10;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
         } else if (oldShaderValue == 1.0){
             cue = 11;
-            video->stop();
-            video->close();            
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips->close();            
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
 
             cout<<"cue: "<<cue<<endl;
         } else {
             cue = 0;
-            video->stop();
-            video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            video->loadMovie(paths[cue]);
-            video->setVolume(0.0f);
-            video->play();
+            clips->stop();
+            clips = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+            clips->loadMovie(paths[cue]);
+            clips->setVolume(0.0f);
+            clips->play();
             cout<<"shadervalue is the same: "<<shaderValue<<endl;
         
     }
@@ -268,7 +266,7 @@ void ofApp::draw(){
     
     fbo.begin();
     ofClear(0, 0, 0, 0);
-    video->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    clips->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     cout<<"cue: "<<cue<<endl;
     fbo.end();
     
