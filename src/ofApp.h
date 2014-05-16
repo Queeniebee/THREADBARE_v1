@@ -41,6 +41,7 @@ public:
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
     ofPtr<ofVideoPlayer>video;
+    ofQTKitPlayer clips;
 
     ofFbo fbo, maskFbo;
     
