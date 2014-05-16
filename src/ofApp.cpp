@@ -47,8 +47,7 @@ void ofApp::update(){
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int Result = 0;
-    if (fmod(ofGetElapsedTimef(), 15)){
-
+    
         if(serial.available() > 0){
             serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
             if(bytesReturned[4] == 'z'){
@@ -66,12 +65,16 @@ void ofApp::update(){
             serial.flush();
             serial.writeByte('A');
         }
-    }
-    shaderValue = triggerFunction(firstSensor, secondSensor);
+    
+
+        shaderValue = triggerFunction(firstSensor, secondSensor);
+
 //    cout<<"shaderValue: "<<shaderValue<<endl;
     
 
     int cue;
+    if(fmod(ofGetElapsedTimef(), 45) == 0){
+
     if(oldShaderValue != shaderValue){
         cout<<"Update Value"<<endl;
         oldShaderValue = shaderValue;
@@ -199,13 +202,10 @@ void ofApp::update(){
             video->loadMovie(paths[cue]);
             video->setVolume(0.0f);
             video->play();
-
-        }
+            cout<<"shadervalue is the same: "<<shaderValue<<endl;
         
-    } else{
-    
-        cout<<"shadervalue is the same: "<<shaderValue<<endl;
-    
+    }
+    }
     }
 
 
