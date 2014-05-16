@@ -48,30 +48,28 @@ void ofApp::update(){
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int Result = 0;
 
-    if(fmodf(ofGetElapsedTimef(), 30.0) >= 0 && fmodf(ofGetElapsedTimef(), 30.0) <= 2){
-        cout<<"Elasped Time: "<<ofGetElapsedTimef()<<endl;
         if(serial.available() > 0){
             serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
             if(bytesReturned[4] == 'z'){
                 if(bytesReturned[0] == '1'){
                     firstSensor = bytesReturned[1];
-//                    cout<<"firstSensor after1: "<<firstSensor<<endl;
+                    cout<<"firstSensor after1: "<<firstSensor<<endl;
                 
                 }
                 if(bytesReturned[2] == '2'){
                     secondSensor = bytesReturned[3];
-//                    cout<<"secondSensor after1: "<<secondSensor<<endl;
+                    cout<<"secondSensor after1: "<<secondSensor<<endl;
 
             }
             }
             serial.flush();
             serial.writeByte('A');
         }
-    
-
+  
+    if(fmodf(ofGetElapsedTimef(), 3.0) >= 0 && fmodf(ofGetElapsedTimef(), 3.0) <= 5){
+        cout<<"Elasped Time: "<<ofGetElapsedTimef()<<endl;
         shaderValue = triggerFunction(firstSensor, secondSensor);
         cout<<"shaderValue: "<<shaderValue<<endl;
-    
     }
 
     if(oldShaderValue != shaderValue){
@@ -207,32 +205,17 @@ void ofApp::update(){
     }
 
 
-    cout<<"FirstSensor: "<<firstSensor<<endl;
-    cout<<"SecondSensor: "<<secondSensor<<endl;
+//    cout<<"FirstSensor: "<<firstSensor<<endl;
+//    cout<<"SecondSensor: "<<secondSensor<<endl;
 
 }
 //--------------------------------------------------------------
 void ofApp::onNewMessage(string &message){
-    
-//    vector<string> input = ofSplitString(message, ",");
-//    string firstOne, secondOne;
-//	if(input.size() >= 3)
-//	{
-//        firstOne = input.at(0).c_str();
-//        secondOne = input.at(2).c_str();
-//	}
-//    
-//    firstSensor = stringToInt(firstOne);
-//    secondSensor = stringToInt(secondOne);
 
     
 }
 //--------------------------------------------------------------
 int ofApp::stringToInt(const string &Text){
-    
-    stringstream convert(Text);
-    int result;
-    return convert >> result ? result : 0;
 
 }
 //--------------------------------------------------------------
@@ -292,19 +275,10 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 int ofApp::averageSensor1(int sensorValue1[]){
-    int returnValue = 0;
-    for(int i = 0; i < NUM_CLIPS; i++){
-        returnValue += sensorValue1[i];
-    }
-    return returnValue / NUM_CLIPS;
+
 }
 //--------------------------------------------------------------
 int ofApp::averageSensor2(int sensorValue2[]){
-    int returnValue = 0;
-    for(int i = 0; i < NUM_CLIPS; i++){
-        returnValue += sensorValue2[i];
-    } 
-        return returnValue / NUM_CLIPS;
 }
 //--------------------------------------------------------------
 float ofApp::triggerFunction(int sensorValue, int sensorValue2){
