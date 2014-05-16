@@ -17,14 +17,24 @@ void ofApp::setup(){
     paths[10] = "THREABARE_v2/Resources/THREABARE_v2.mov";
     paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
     
+    clips->setPixelFormat(OF_PIXELS_RGBA);
+    ofQTKitDecodeMode decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
+    clips = ofPtr<ofQTKitPlayer>(new ofQTKitPlayer);
+    
+    
+    
     videoSound.loadSound("Threadbare_voiceover.mp3");
     videoSound.setVolume(0.8f);
     videoSound.play();
-
+/*
     video =  ofPtr<ofVideoPlayer>(new ofVideoPlayer());
     video->loadMovie(paths[0]);
     video->setVolume(0.0f);
     video->play();
+*/
+    clips->loadMovie(paths[11], decodeMode);
+    clips->setVolume(0.0);
+    clips->play();
     
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
     
@@ -40,8 +50,10 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    video->update();
+//    video->update();
 
+    clips->update();
+    
     int bytesRequired = 5;
     unsigned char bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;

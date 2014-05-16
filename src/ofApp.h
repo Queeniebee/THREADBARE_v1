@@ -11,6 +11,7 @@
 #include "ofxSimpleSerial.h"
 #include <vector>
 #include "ofUtils.h"
+#include "ofQTKitPlayer.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -41,7 +42,8 @@ public:
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
     ofPtr<ofVideoPlayer>video;
-    ofQTKitPlayer clips;
+
+    ofPtr<ofQTKitPlayer>clips;
 
     ofFbo fbo, maskFbo;
     
