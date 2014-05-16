@@ -41,10 +41,11 @@ public:
 
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
-    ofPtr<ofVideoPlayer>video;
+//    ofPtr<ofVideoPlayer>video;
 
-    ofPtr<ofQTKitPlayer>clips;
-
+//    ofPtr<ofQTKitPlayer>clips;
+    ofQTKitPlayer *clips;
+    ofQTKitPlayer video;
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
