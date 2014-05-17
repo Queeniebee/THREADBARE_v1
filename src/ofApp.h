@@ -29,31 +29,20 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    //Splitting up the averageSensor function into 2 because not enough
-    // time to configure a struct or return a pair
-    int averageSensor1(int sensorValue[]);
-    int averageSensor2(int sensorValue2[]);
-    void onNewMessage(string & message);
     float triggerFunction(int sensorValue1, int sensorValue2);
-    
-//    ofShader shader, shader2;
-//    ofVideoPlayer video[NUM_CLIPS];
 
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
-//    ofPtr<ofVideoPlayer>video;
-//    ofPtr<ofQTKitPlayer>video;
-    
-    ofQTKitPlayer *clipsPointer;
+
+//    ofQTKitPlayer *clipsPointer;
     ofQTKitDecodeMode decodeMode;
     ofQTKitPlayer videos[NUM_CLIPS];
     
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
-    string message;
-    float oldShaderValue, shaderValue = 0.0;
-    int stringToInt(const string &Text);
-    int firstSensor, secondSensor, cue;
+    int firstSensor, secondSensor;
+    float shaderValue;
+    int cue = 0;
 
 };
