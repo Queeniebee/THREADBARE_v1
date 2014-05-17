@@ -42,12 +42,11 @@ public:
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
 //    ofPtr<ofVideoPlayer>video;
-
 //    ofPtr<ofQTKitPlayer>video;
     
     ofQTKitPlayer *clipsPointer;
     ofQTKitDecodeMode decodeMode;
-    ofQTKitPlayer video;
+    ofQTKitPlayer videos[NUM_CLIPS];
     
     ofFbo fbo, maskFbo;
     
