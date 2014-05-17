@@ -55,8 +55,6 @@ public:
     string message;
     float oldShaderValue, shaderValue;
     int stringToInt(const string &Text);
-    int firstSensor, secondSensor;
-    int somevalue, somevalue2;
-
+    int firstSensor, secondSensor, cue;
 
 };
