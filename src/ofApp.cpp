@@ -19,7 +19,7 @@ void ofApp::setup(){
     
     clipsPointer =  &video;
     clipsPointer->setPixelFormat(OF_PIXELS_RGBA);
-    ofQTKitDecodeMode decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
+    decodeMode = OF_QTKIT_DECODE_TEXTURE_ONLY;
 
 //    videoSound.loadSound("Threadbare_voiceover.mp3");
 //    videoSound.setVolume(0.8f);
@@ -42,7 +42,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    video.update();
+    clipsPointer->update();
     
     int bytesRequired = 5;
     unsigned char bytesReturned[bytesRequired];
@@ -72,15 +72,14 @@ void ofApp::update(){
         shaderValue = triggerFunction(firstSensor, secondSensor);
         cout<<"shaderValue: "<<shaderValue<<endl;
 //    }
-
+    int cue;
     if(oldShaderValue != shaderValue){
-        cout<<"Update Value"<<endl;
         oldShaderValue = shaderValue;
         if (oldShaderValue == 0.08){
             cue = 1;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -98,7 +97,7 @@ void ofApp::update(){
             cue = 2;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -116,7 +115,7 @@ void ofApp::update(){
             cue = 3;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -134,7 +133,7 @@ void ofApp::update(){
             cue = 4;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -152,7 +151,7 @@ void ofApp::update(){
             cue = 5;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -170,7 +169,7 @@ void ofApp::update(){
             cue = 6;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -183,11 +182,12 @@ void ofApp::update(){
              */
             
             cout<<"cue: "<<cue<<endl;
+            
         } else if (oldShaderValue == 0.56){
             cue = 7;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -205,7 +205,7 @@ void ofApp::update(){
             cue = 8;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -223,7 +223,7 @@ void ofApp::update(){
             cue = 9;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -241,7 +241,7 @@ void ofApp::update(){
             cue = 10;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -258,7 +258,7 @@ void ofApp::update(){
             cue = 11;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -275,7 +275,7 @@ void ofApp::update(){
             cue = 0;
             clipsPointer->stop();
             clipsPointer->close();
-            clipsPointer->loadMovie(paths[cue]);
+            clipsPointer->loadMovie(paths[cue], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -286,10 +286,9 @@ void ofApp::update(){
              video.setVolume(0.0f);
              video.play();
              */
-            
-            cout<<"shadervalue is the same: "<<shaderValue<<endl;
-        
     }
+        cout<<"shadervalue is the same: "<<shaderValue<<endl;
+
     }
 
 }
@@ -341,7 +340,7 @@ void ofApp::draw(){
     fbo.begin();
     ofClear(0, 0, 0, 0);
     clipsPointer->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-    cout<<"cue: "<<cue<<endl;
+//    cout<<"cue: "<<cue<<endl;
     fbo.end();
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());

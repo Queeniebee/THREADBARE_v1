@@ -46,18 +46,17 @@ public:
 //    ofPtr<ofQTKitPlayer>video;
     
     ofQTKitPlayer *clipsPointer;
+    ofQTKitDecodeMode decodeMode;
     ofQTKitPlayer video;
     
     ofFbo fbo, maskFbo;
     
     ofSerial serial;
     string message;
-    int oldShaderValue;
+    float oldShaderValue, shaderValue;
     int stringToInt(const string &Text);
     int firstSensor, secondSensor;
     int somevalue, somevalue2;
-    int cue;
-    float shaderValue;
 
 
 };
