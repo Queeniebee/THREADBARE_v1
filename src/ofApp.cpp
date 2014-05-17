@@ -2,8 +2,6 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetVerticalSync(true);
-
     paths[0] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
     paths[1] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
     paths[2] = "THREADBARE_replacev52/Resources/THREADBARE_replacev52.mov";
@@ -17,23 +15,20 @@ void ofApp::setup(){
     paths[10] = "THREABARE_v2/Resources/THREABARE_v2.mov";
     paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
     
-    decodeMode = OF_QTKIT_DECODE_TEXTURE_ONLY;
-
-    for(int i = 0; i<NUM_CLIPS; i++){
-        videos[i].loadMovie(paths[i], decodeMode);
-    }
-    
     clipsPointer =  &videos[0];
     clipsPointer->setPixelFormat(OF_PIXELS_RGBA);
+    
+    decodeMode = OF_QTKIT_DECODE_TEXTURE_ONLY;
+    
+    for(int i = 0; i< sizeof(videos)/sizeof(ofQTKitPlayer); i++){
+        videos[i].loadMovie(paths[i], decodeMode);
+    }
+    clipsPointer->setVolume(0.0);
     clipsPointer->play();
 
 //    videoSound.loadSound("Threadbare_voiceover.mp3");
 //    videoSound.setVolume(0.8f);
 //    videoSound.play();
-    
-//    clipsPointer->loadMovie(paths[11], decodeMode);
-//    clipsPointer->setVolume(0.0);
-//    clipsPointer->play();
     
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
     fbo.begin();
@@ -48,8 +43,6 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    clipsPointer->update();
-    
     int bytesRequired = 5;
     unsigned char bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
@@ -61,29 +54,31 @@ void ofApp::update(){
             if(bytesReturned[4] == 'z'){
                 if(bytesReturned[0] == '1'){
                     firstSensor = bytesReturned[1];
-                    cout<<"firstSensor after1: "<<firstSensor<<endl;
+//                    cout<<"firstSensor after1: "<<firstSensor<<endl;
                 
                 }
                 if(bytesReturned[2] == '2'){
                     secondSensor = bytesReturned[3];
-                    cout<<"secondSensor after1: "<<secondSensor<<endl;
+//                    cout<<"secondSensor after1: "<<secondSensor<<endl;
 
             }
             }
             serial.flush();
             serial.writeByte('A');
         }
-  
-    if(fmodf(ofGetElapsedTimef(), 30.0) >= 0 && fmodf(ofGetElapsedTimef(), 30.0) <= 2){
+
         shaderValue = triggerFunction(firstSensor, secondSensor);
-        cout<<"shaderValue: "<<shaderValue<<endl;
-    }
+
+ if(fmodf(ofGetElapsedTimef(), 15.0) >= 0 && fmodf(ofGetElapsedTimef(), 15.0) <= 2){
+
     if(oldShaderValue != shaderValue){
+        cout<<"shaderValue: "<<shaderValue<<endl;
+
         oldShaderValue = shaderValue;
         if (oldShaderValue == 0.08){
             cue = 1;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[1];
             clipsPointer->loadMovie(paths[1], decodeMode);
             clipsPointer->setVolume(0.0f);
@@ -94,7 +89,7 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.16){
             cue = 2;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[2];
             clipsPointer->loadMovie(paths[2], decodeMode);
             clipsPointer->setVolume(0.0f);
@@ -105,7 +100,7 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.24){
             cue = 3;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[3];
             clipsPointer->loadMovie(paths[3], decodeMode);
             clipsPointer->setVolume(0.0f);
@@ -116,7 +111,7 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.32){
             cue = 4;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[4];
             clipsPointer->loadMovie(paths[4], decodeMode);
             clipsPointer->setVolume(0.0f);
@@ -126,7 +121,7 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.40){
             cue = 5;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[5];
             clipsPointer->loadMovie(paths[5], decodeMode);
             clipsPointer->setVolume(0.0f);
@@ -137,9 +132,9 @@ void ofApp::update(){
         } else if(oldShaderValue == 0.48){
             cue = 6;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[6];
-            clipsPointer->loadMovie(paths[6], decodeMode);
+//            clipsPointer->loadMovie(paths[6], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -148,9 +143,9 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.56){
             cue = 7;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[7];
-            clipsPointer->loadMovie(paths[7], decodeMode);
+//            clipsPointer->loadMovie(paths[7], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
 
@@ -159,9 +154,9 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.64){
             cue = 8;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[8];
-            clipsPointer->loadMovie(paths[8], decodeMode);
+//            clipsPointer->loadMovie(paths[8], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
 
@@ -170,9 +165,9 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.72){
             cue = 9;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[9];
-            clipsPointer->loadMovie(paths[9], decodeMode);
+//            clipsPointer->loadMovie(paths[9], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
 
@@ -181,9 +176,9 @@ void ofApp::update(){
         } else if (oldShaderValue == 0.8){
             cue = 10;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[10];
-            clipsPointer->loadMovie(paths[10], decodeMode);
+//            clipsPointer->loadMovie(paths[10], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
@@ -191,25 +186,28 @@ void ofApp::update(){
         } else if (oldShaderValue == 1.0){
             cue = 11;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[11];
-            clipsPointer->loadMovie(paths[11], decodeMode);
+//            clipsPointer->loadMovie(paths[11], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
             cout<<"cue: "<<cue<<endl;
-        } else {
+        } else if (oldShaderValue == 0.0){
             cue = 0;
             clipsPointer->stop();
-            clipsPointer->close();
+//            clipsPointer->close();
             clipsPointer = &videos[0];
-            clipsPointer->loadMovie(paths[0], decodeMode);
+//            clipsPointer->loadMovie(paths[0], decodeMode);
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
     }
         cout<<"shadervalue is the same: "<<shaderValue<<endl;
 
     }
+ }
+    clipsPointer->update();
+
 }
 //--------------------------------------------------------------
 void ofApp::onNewMessage(string &message){
@@ -257,7 +255,7 @@ void ofApp::draw(){
 
     
     fbo.begin();
-    ofClear(0, 0, 0, 0);
+    ofClear(0, 0, 0, 255);
     clipsPointer->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     fbo.end();
     

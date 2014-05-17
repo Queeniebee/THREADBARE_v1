@@ -52,7 +52,7 @@ public:
     
     ofSerial serial;
     string message;
-    float oldShaderValue, shaderValue;
+    float oldShaderValue, shaderValue = 0.0;
     int stringToInt(const string &Text);
     int firstSensor, secondSensor, cue;
 
