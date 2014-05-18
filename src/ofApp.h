@@ -43,6 +43,5 @@ public:
     ofSerial serial;
     int firstSensor, secondSensor;
     float shaderValue;
-    int cue = 0;
 
 };
