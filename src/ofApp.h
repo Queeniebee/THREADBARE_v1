@@ -45,10 +45,13 @@ public:
     ofSerial serial;
     int firstSensor, secondSensor;
     float shaderValue;
+    int oldShaderValue;
+
+    bool getSerialMessage;
+    int countCycles;
     
     ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;
 
-    int oldShaderValue;
 
 };

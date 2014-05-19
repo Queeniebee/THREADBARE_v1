@@ -4,6 +4,7 @@
 void ofApp::setup(){
     
     ofSetVerticalSync(true);
+    getSerialMessage = false;
 
     paths[0] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
     paths[1] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
@@ -55,7 +56,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-/*    int bytesRequired = 5;
+ /*   int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
@@ -80,41 +81,87 @@ void ofApp::update(){
             }
             serial.flush();
             serial.writeByte('A');
-        } */
+        }*/
+
     
     int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-    int Result = 0;
+//    countCycles = 0;
+    
+//    int averageFirstSensor;
+//    int averageSecondSensor;
+//    int index = 0;
     
     memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
-    
+//    memset(averageFirstSensor, 0, bytesRequired * sizeof(uint8_t));
+//    memset(averageSecondSensor, 0, bytesRequired * sizeof(uint8_t));
+
     if(serial.available() > 0){
+        serial.writeByte('A');
+
+    if(getSerialMessage){
+
         cout << "I'm here" << endl;
         serial.readBytes( bytesReturned, bytesRemaining );
+//        index++;
+        
         if(bytesReturned[4] == 'z'){
             if(bytesReturned[0] == '1'){
                 firstSensor = bytesReturned[1];
+//                averageFirstSensor += firstSensor;
+
                 cout<<"firstSensor after1: "<< firstSensor <<endl;
-                
+//                cout<<"averageFirstSensor after1: "<< averageFirstSensor <<endl;
+
             }
             if(bytesReturned[2] == '2'){
                 secondSensor = bytesReturned[3];
-                cout<<"secondSensor after1: "<<secondSensor<<endl;
-                
-            }
-        }
-        serial.flush();
-        serial.writeByte('A');
-    }
-        
-//    if(fmodf(ofGetElapsedTimef(), 30.0) >= 0 && fmodf(ofGetElapsedTimef(), 30.0) <= 2){
+//                averageSecondSensor += secondSensor;
 
-        shaderValue = triggerFunction(firstSensor, secondSensor);
+                cout<<"secondSensor after1: "<<secondSensor<<endl;
+//                cout<<"averageSecondSensor after1: "<< averageSecondSensor <<endl;
+
+            }
+            }
+ 
+//        index++;
+//        averageFirstSensor += firstSensor;
+//        averageSecondSensor += secondSensor;
+//        if(index == 10){
+//            firstSensor = averageFirstSensor / 10;
+//            secondSensor = averageSecondSensor / 10;
+//            index = 0;
+//        }
+     
+        serial.flush();
+
+    }
+//        if (index == 5) {
+//            firstSensor = averageFirstSensor / index;
+//            secondSensor = averageSecondSensor / index;
+//            cout<<"averageSecondSensor after1: "<< averageSecondSensor <<endl;
+//            
+//            index = 0;
+//        }
+        getSerialMessage = false;
+
+
+    }
+    cout<<"Get Serial?: "<<getSerialMessage<<endl;
+    countCycles++;
+//    cout<<"countCyles: "<<countCycles<<endl;
+    if(countCycles == 5){
+        getSerialMessage = true;
+        countCycles = 0;
+    }
+
+
+    shaderValue = triggerFunction(firstSensor, secondSensor);
     cout<<"shaderValue after triggerFunction: "<<shaderValue<<endl;
-//    }
-    
+
+
     
 //    oldShaderValue = 0;
     int intShaderValue = shaderValue * 100;
@@ -166,7 +213,7 @@ void ofApp::update(){
             clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.4){
+        } else if (oldShaderValue == 40){
             cue = 5;
             clipsPointer->stop();
             //            clipsPointer->close();
@@ -308,7 +355,7 @@ float ofApp::triggerFunction(int sensorValue, int sensorValue2){
         alphaValue = 0.8;
         return alphaValue;
         
-    } else if (((sensorValue >= 228) && (sensorValue < 246)) || ((sensorValue2 >= 228) && (sensorValue2 < 246))){
+    } else if (((sensorValue >= 228) && (sensorValue < 256)) || ((sensorValue2 >= 228) && (sensorValue2 < 256))){
         alphaValue = 1.0;
         return alphaValue;
     } else{
