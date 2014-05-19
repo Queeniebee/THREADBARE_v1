@@ -13,6 +13,8 @@
 #include <vector>
 #include "ofUtils.h"
 
+#include "ofxSyphon.h"
+
 class ofApp : public ofBaseApp{
 public:
     void setup();
@@ -43,5 +45,9 @@ public:
     ofSerial serial;
     int firstSensor, secondSensor;
     float shaderValue;
+    int cue = 0;
+    
+    ofxSyphonServer mainOutputSyphonServer;
+	ofxSyphonServer individualTextureSyphonServer;
 
 };

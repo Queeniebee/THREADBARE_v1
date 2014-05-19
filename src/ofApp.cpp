@@ -39,23 +39,28 @@ void ofApp::setup(){
     serial.enumerateDevices();
     serial.setup(0,9600);
 
+    mainOutputSyphonServer.setName("Screen Output");
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
     int bytesRequired = 5;
-    unsigned char bytesReturned[bytesRequired];
+    uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int Result = 0;
-
+    
+    memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
+    
         if(serial.available() > 0){
-            serial.readBytes(&bytesReturned[bytesPreventOverwrite], bytesRemaining);
+            
+            serial.readBytes( bytesReturned, bytesRemaining );
             if(bytesReturned[4] == 'z'){
                 if(bytesReturned[0] == '1'){
                     firstSensor = bytesReturned[1];
-                    cout<<"firstSensor after1: "<<firstSensor<<endl;
+                    cout<<"firstSensor after1: "<< firstSensor <<endl;
                 
                 }
                 if(bytesReturned[2] == '2'){
@@ -68,6 +73,7 @@ void ofApp::update(){
             serial.writeByte('A');
         }
     
+    
     for(int i = 0; i<NUM_CLIPS; i++){
         videos[i].update();
     }
@@ -77,14 +83,13 @@ void ofApp::update(){
         shaderValue = triggerFunction(firstSensor, secondSensor);
     cout<<"shaderValue after triggerFunction: "<<shaderValue<<endl;
 //    }
+    
 
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
 
     float oldShaderValue = 0;
-    int cue = 0;
-
     cout<<"cue before: "<<cue<<endl;
     cout<<"is this printing??"<<oldShaderValue<<endl;
     cout<<"shaderValue:"<<shaderValue<<endl;
@@ -96,62 +101,62 @@ void ofApp::draw(){
         if(oldShaderValue == 0){
             cue = 0;
             cout<<"HELLO??: "<<cue<<endl;
-            } else if(oldShaderValue == 0.08){
+        } else if(oldShaderValue == 0.08){
             cue = 1;
-                        
+            
             cout<<"cue: "<<cue<<endl;
-            } else if (oldShaderValue == 0.16){
+        } else if (oldShaderValue == 0.16){
             cue = 2;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.24){
+        } else if (oldShaderValue == 0.24){
             cue = 3;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.32){
+        } else if (oldShaderValue == 0.32){
             cue = 4;
-
+            
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.4){
+        } else if (oldShaderValue == 0.4){
             cue = 5;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if(oldShaderValue == 0.48){
+        } else if(oldShaderValue == 0.48){
             cue = 6;
             
             cout<<"cue: "<<cue<<endl;
-    
-            } else if (oldShaderValue == 0.56){
+            
+        } else if (oldShaderValue == 0.56){
             cue = 7;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.64){
+        } else if (oldShaderValue == 0.64){
             cue = 8;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.72){
+        } else if (oldShaderValue == 0.72){
             cue = 9;
             
             cout<<"cue: "<<cue<<endl;
             
-            } else if (oldShaderValue == 0.8){
+        } else if (oldShaderValue == 0.8){
             cue = 10;
             
             cout<<"cue: "<<cue<<endl;
-            } else {
+        } else {
             cue = 11;
             
             cout<<"cue: "<<cue<<endl;
-            }
-            cout<<"Why is nothing happening???"<<endl;
+        }
+        cout<<"Why is nothing happening???"<<endl;
     }
-
+    
     cout<<"cue after: "<<cue<<endl;
 
     fbo.begin();
@@ -160,6 +165,7 @@ void ofApp::draw(){
     fbo.end();
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    mainOutputSyphonServer.publishScreen();
 
 }
 
