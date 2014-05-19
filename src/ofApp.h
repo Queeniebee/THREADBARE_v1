@@ -36,7 +36,7 @@ public:
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
 
-//    ofQTKitPlayer *clipsPointer;
+    ofQTKitPlayer *clipsPointer;
     ofQTKitDecodeMode decodeMode;
     ofQTKitPlayer videos[NUM_CLIPS];
     
@@ -45,9 +45,10 @@ public:
     ofSerial serial;
     int firstSensor, secondSensor;
     float shaderValue;
-    int cue = 0;
     
     ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;
+
+    int oldShaderValue;
 
 };

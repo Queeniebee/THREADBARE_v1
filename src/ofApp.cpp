@@ -18,18 +18,27 @@ void ofApp::setup(){
     paths[10] = "THREABARE_v2/Resources/THREABARE_v2.mov";
     paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
 
+    clipsPointer = &videos[0];
+    clipsPointer->setPixelFormat(OF_PIXELS_RGBA);
+
     decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
     
-    for(int i = 0; i< NUM_CLIPS; i++){
+ /*   for(int i = 0; i< NUM_CLIPS; i++){
         videos[i].setPixelFormat(OF_PIXELS_RGBA);
         videos[i].loadMovie(paths[i], decodeMode);
         videos[i].setVolume(0.0f);
         videos[i].play();
-    }
+    } */
     
-//    videoSound.loadSound("Threadbare_voiceover.mp3");
-//    videoSound.setVolume(0.8f);
-//    videoSound.play();
+    for(int i = 0; i< sizeof(videos)/sizeof(ofQTKitPlayer); i++){
+        videos[i].loadMovie(paths[i], decodeMode);
+    }
+    clipsPointer->setVolume(0.0f);
+    clipsPointer->play();
+    
+    videoSound.loadSound("Threadbare_voiceover.mp3");
+    videoSound.setVolume(1.0f);
+    videoSound.play();
     
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
     fbo.begin();
@@ -46,7 +55,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    int bytesRequired = 5;
+/*    int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
@@ -71,97 +80,169 @@ void ofApp::update(){
             }
             serial.flush();
             serial.writeByte('A');
+        } */
+    
+    int bytesRequired = 5;
+    uint8_t bytesReturned[bytesRequired];
+    int bytesRemaining = bytesRequired;
+    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
+    int Result = 0;
+    
+    memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
+    
+    if(serial.available() > 0){
+        cout << "I'm here" << endl;
+        serial.readBytes( bytesReturned, bytesRemaining );
+        if(bytesReturned[4] == 'z'){
+            if(bytesReturned[0] == '1'){
+                firstSensor = bytesReturned[1];
+                cout<<"firstSensor after1: "<< firstSensor <<endl;
+                
+            }
+            if(bytesReturned[2] == '2'){
+                secondSensor = bytesReturned[3];
+                cout<<"secondSensor after1: "<<secondSensor<<endl;
+                
+            }
         }
-    
-    
-    for(int i = 0; i<NUM_CLIPS; i++){
-        videos[i].update();
+        serial.flush();
+        serial.writeByte('A');
     }
-    
-//    if(fmodf(ofGetElapsedTimef(), 30.0) >= 0 && fmodf(ofGetElapsedTimef(), 30.0) <= 1){
+        
+//    if(fmodf(ofGetElapsedTimef(), 30.0) >= 0 && fmodf(ofGetElapsedTimef(), 30.0) <= 2){
 
         shaderValue = triggerFunction(firstSensor, secondSensor);
     cout<<"shaderValue after triggerFunction: "<<shaderValue<<endl;
 //    }
     
-
-}
-//--------------------------------------------------------------
-void ofApp::draw(){
-
-    float oldShaderValue = 0;
-    cout<<"cue before: "<<cue<<endl;
-    cout<<"is this printing??"<<oldShaderValue<<endl;
-    cout<<"shaderValue:"<<shaderValue<<endl;
     
-    if(oldShaderValue != shaderValue){
-        cout<<"oldShaderValue before being set: "<<oldShaderValue<<endl;
-        oldShaderValue = shaderValue;
-        cout<<"oldShaderValue after being set: "<<oldShaderValue<<endl;
+//    oldShaderValue = 0;
+    int intShaderValue = shaderValue * 100;
+    int cue = 0;
+    
+    if(oldShaderValue != intShaderValue){
+        oldShaderValue = intShaderValue;
+        
         if(oldShaderValue == 0){
             cue = 0;
-            cout<<"HELLO??: "<<cue<<endl;
-        } else if(oldShaderValue == 0.08){
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
+        } else if(oldShaderValue == 8){
             cue = 1;
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             
             cout<<"cue: "<<cue<<endl;
-        } else if (oldShaderValue == 0.16){
+        } else if (oldShaderValue == 16){
             cue = 2;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.24){
+        } else if (oldShaderValue == 24){
             cue = 3;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.32){
+        } else if (oldShaderValue == 32){
             cue = 4;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 0.4){
             cue = 5;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if(oldShaderValue == 0.48){
+        } else if(oldShaderValue == 48){
             cue = 6;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.56){
+        } else if (oldShaderValue == 56){
             cue = 7;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.64){
+        } else if (oldShaderValue == 64){
             cue = 8;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.72){
+        } else if (oldShaderValue == 72){
             cue = 9;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
             
-        } else if (oldShaderValue == 0.8){
+        } else if (oldShaderValue == 80){
             cue = 10;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
         } else {
+            //olderShaderValue == 100;
             cue = 11;
-            
+            clipsPointer->stop();
+            //            clipsPointer->close();
+            clipsPointer = &videos[cue];
+            clipsPointer->setVolume(0.0f);
+            clipsPointer->play();
             cout<<"cue: "<<cue<<endl;
         }
         cout<<"Why is nothing happening???"<<endl;
     }
     
     cout<<"cue after: "<<cue<<endl;
+    clipsPointer->update();
+
+}
+//--------------------------------------------------------------
+void ofApp::draw(){
+
 
     fbo.begin();
     ofClear(0, 0, 0, 0);
-    videos[cue].draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
+    clipsPointer->draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
     fbo.end();
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
