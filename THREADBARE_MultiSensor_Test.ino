@@ -2,22 +2,22 @@
 // Based on the MultiSensor Example from the NewPing library by Tim Eckel - teckel@leethost.com
 // Copyright 2012 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
 // by Jo as Queeniebee
+// Based on the MultiSensor Example from the NewPing library
+// by Tim Eckel - teckel@leethost.com
+// Copyright 2012 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
 //--------
 
 #include <NewPing.h>
 
 #define NUM_SENSORS    2 // Number or sensors.
-#define MAX_DISTANCE 400 // Maximum distance (in cm) to ping.
+#define MAX_DISTANCE 300 // Maximum distance (in cm) to ping.
 #define PING_INTERVAL 33 // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
-
 #define TRIGGER_PIN_1 13
 #define ECHO_PIN_1    12
 #define TRIGGER_PIN_2 11
 #define ECHO_PIN_2    10
 
 unsigned long pingTimer[NUM_SENSORS]; // Holds the times when the next ping should happen for each sensor.
-//unsigned int firstSensor[4];          // array to avg out the first sensor values
-//unsigned int secondSensor[4];         // array to avg out the second sensor values
 
 unsigned int cm[NUM_SENSORS];         // Where the ping distances to the openFrameworks sketch are stored.
 unsigned int firstSensor;
@@ -54,24 +54,24 @@ void loop() {
     }
   }
 
+
+
 }
 
 void echoCheck() { // If ping received, set the sensor distance to array.
   if (sonar[currentSensor].check_timer()){
     cm[currentSensor] = sonar[currentSensor].ping_result / US_ROUNDTRIP_CM;
+    cm[currentSensor] = map(cm[currentSensor], 0, 300, 0, 255);
   }
 }
 
 void oneSensorCycle() {
-  for(uint8_t i = 0; i < NUM_SENSORS; i++){
-    //    firstSensor = cm[0];
-    //    secondSensor = cm[1];
-
-    Serial.write('1');
-    Serial.write(cm[0]);
-    Serial.write('2');
-    Serial.write(cm[1]);
-  }
+  //  for(uint8_t i = 0; i < NUM_SENSORS; i++){
+  Serial.write('1');
+  Serial.write(cm[0]);
+  Serial.write('2');
+  Serial.write(cm[1]);
+  //  }
   Serial.write('z');
 
 }
@@ -79,7 +79,9 @@ void oneSensorCycle() {
 void establishContact() {
   while (Serial.available() <= 0) {
     Serial.write('B');   // send an initial byte
-    delay(29);
+    delay(300);
   }
 }
+
+
 
