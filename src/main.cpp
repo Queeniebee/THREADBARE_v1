@@ -6,7 +6,7 @@
 int main( ){
         
     ofAppGLFWWindow window;
-	ofSetupOpenGL(&window, 1024,768,OF_WINDOW); // <-------- setup the GL context
+	ofSetupOpenGL(&window, 1400,1050,OF_WINDOW); // <-------- setup the GL context
 //    window.setMultiDisplayFullscreen(true);
     
 	// this kicks off the running of my app

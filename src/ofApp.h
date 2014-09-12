@@ -49,6 +49,8 @@ public:
 
     bool getSerialMessage;
     int countCycles;
+    int selectVideo(int sensorValue);
+    int prevSensorReading =0;
     
     ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;

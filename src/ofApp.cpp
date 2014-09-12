@@ -39,6 +39,7 @@ void ofApp::setup(){
     
     videoSound.loadSound("Threadbare_voiceover.mp3");
     videoSound.setVolume(1.0f);
+    videoSound.setLoop(true);
     videoSound.play();
     
     fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight());
@@ -55,7 +56,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    ofSoundUpdate();
  /*   int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
@@ -103,7 +104,7 @@ void ofApp::update(){
 
     if(getSerialMessage){
 
-        cout << "I'm here" << endl;
+//        cout << "I'm here" << endl;
         serial.readBytes( bytesReturned, bytesRemaining );
 //        index++;
         
@@ -112,7 +113,7 @@ void ofApp::update(){
                 firstSensor = bytesReturned[1];
 //                averageFirstSensor += firstSensor;
 
-                cout<<"firstSensor after1: "<< firstSensor <<endl;
+//                cout<<"firstSensor after1: "<< firstSensor <<endl;
 //                cout<<"averageFirstSensor after1: "<< averageFirstSensor <<endl;
 
             }
@@ -120,7 +121,7 @@ void ofApp::update(){
                 secondSensor = bytesReturned[3];
 //                averageSecondSensor += secondSensor;
 
-                cout<<"secondSensor after1: "<<secondSensor<<endl;
+//                cout<<"secondSensor after1: "<<secondSensor<<endl;
 //                cout<<"averageSecondSensor after1: "<< averageSecondSensor <<endl;
 
             }
@@ -149,7 +150,7 @@ void ofApp::update(){
 
 
     }
-    cout<<"Get Serial?: "<<getSerialMessage<<endl;
+//    cout<<"Get Serial?: "<<getSerialMessage<<endl;
     countCycles++;
 //    cout<<"countCyles: "<<countCycles<<endl;
     if(countCycles == 5){
@@ -157,17 +158,31 @@ void ofApp::update(){
         countCycles = 0;
     }
 
+    int selectedSensor = MIN(firstSensor, secondSensor);
+    if(selectedSensor != prevSensorReading){
+        //do stuff here
+        //else ignore it
+        int currentVideoIndex = selectVideo(selectedSensor);
+        clipsPointer->stop();
+        clipsPointer = &videos[currentVideoIndex];
+        clipsPointer->setVolume(0.0f);
+        clipsPointer->play();
+        
+    }
+    prevSensorReading = selectedSensor;
 
+    //    int videoIndex =
     shaderValue = triggerFunction(firstSensor, secondSensor);
-    cout<<"shaderValue after triggerFunction: "<<shaderValue<<endl;
+//    cout<<"shaderValue after triggerFunction: "<<shaderValue<<endl;
 
-
+    
     
 //    oldShaderValue = 0;
     int intShaderValue = shaderValue * 100;
     int cue = 0;
     
     if(oldShaderValue != intShaderValue){
+
         oldShaderValue = intShaderValue;
         
         if(oldShaderValue == 0){
@@ -185,7 +200,7 @@ void ofApp::update(){
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
             
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
         } else if (oldShaderValue == 16){
             cue = 2;
             clipsPointer->stop();
@@ -193,7 +208,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 24){
             cue = 3;
@@ -202,7 +217,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 32){
             cue = 4;
@@ -211,7 +226,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 40){
             cue = 5;
@@ -220,7 +235,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if(oldShaderValue == 48){
             cue = 6;
@@ -229,7 +244,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 56){
             cue = 7;
@@ -238,7 +253,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 64){
             cue = 8;
@@ -247,7 +262,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 72){
             cue = 9;
@@ -256,7 +271,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
             
         } else if (oldShaderValue == 80){
             cue = 10;
@@ -265,7 +280,7 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
         } else {
             //olderShaderValue == 100;
             cue = 11;
@@ -274,12 +289,12 @@ void ofApp::update(){
             clipsPointer = &videos[cue];
             clipsPointer->setVolume(0.0f);
             clipsPointer->play();
-            cout<<"cue: "<<cue<<endl;
+//            cout<<"cue: "<<cue<<endl;
         }
-        cout<<"Why is nothing happening???"<<endl;
+//        cout<<"Why is nothing happening???"<<endl;
     }
     
-    cout<<"cue after: "<<cue<<endl;
+//    cout<<"cue after: "<<cue<<endl;
     clipsPointer->update();
 
 }
@@ -305,67 +320,151 @@ void ofApp::keyPressed(int key){
     }
 }
 
+int ofApp::selectVideo(int sensorValue){
+    int sensorMin = 0;
+    int sensorMax = 300;
+    int videoIndexMin = 0;
+    int videoIndexMax = 11;
+    int currentVideoIndex  = ofMap(sensorValue, sensorMin, sensorMax, videoIndexMin, videoIndexMax,true);
+    cout<<" Current Sensor Value "<<sensorValue<<" Current Video Index "<<currentVideoIndex<<endl;
+
+    return currentVideoIndex;
+}
+
 //--------------------------------------------------------------
 float ofApp::triggerFunction(int sensorValue, int sensorValue2){
 // WILL REPLACE THESE IF STATEMENTS WITH MODULO
     
+    bool first = ((sensorValue >= 1) && (sensorValue < 20));
+    bool firstFromSecond = ((sensorValue2 >= 1) && (sensorValue2 < 20));
+    
+    bool second = ((sensorValue >= 20) && (sensorValue < 36));
+    bool secondFromSecond = ((sensorValue2 >= 20) && (sensorValue2 < 36));
+    
+    bool third = ((sensorValue >= 36) && (sensorValue < 52));
+    bool thirdFromSecond = ((sensorValue2 >= 36) && (sensorValue2 < 52));
+                  
+    bool fourth = ((sensorValue >= 52) && (sensorValue < 68));
+    bool fourthFromSecond = ((sensorValue2 >= 52) && (sensorValue2 < 68));
+                  
+    bool fifth = ((sensorValue >= 68) && (sensorValue < 84));
+    bool fifthFromSecond = ((sensorValue2 >= 68) && (sensorValue2 < 84));
+                  
+    bool sixth = ((sensorValue >= 84) && (sensorValue < 100));
+    bool sixthFromSecond = ((sensorValue2 >= 84) && (sensorValue2 < 100));
+                  
+    bool seventh = ((sensorValue >= 100) && (sensorValue < 116));
+    bool seventhFromSecond = ((sensorValue2 >= 100) && (sensorValue2 < 116));
+                  
+    bool eighth = ((sensorValue >= 116) && (sensorValue < 142));
+    bool eighthFromSecond = ((sensorValue2 >= 116) && (sensorValue2 < 142));
+                  
+    bool ninth = ((sensorValue >= 142) && (sensorValue < 168));
+    bool ninthFromSecond = ((sensorValue2 >= 142) && (sensorValue2 < 168));
+                  
+    bool tenth = ((sensorValue >= 168) && (sensorValue < 182));
+    bool tenthFromSecond = ((sensorValue2 >= 168) && (sensorValue2 < 182));
+                  
+    bool eleventh = ((sensorValue >= 182) && (sensorValue < 232));
+    bool eleventhFromSecond = ((sensorValue2 >= 182) && (sensorValue2 < 232));
+    
     float alphaValue = 1.0;
 
-    if(((sensorValue >= 1) && (sensorValue < 20)) || ((sensorValue2 >= 1) && (sensorValue2 < 20))){
+    if((first && firstFromSecond) || first || firstFromSecond){
         alphaValue = 0.0;
         return alphaValue;
-
-    } else if (((sensorValue >= 20) && (sensorValue < 36)) || ((sensorValue2 >= 20) && (sensorValue2 < 36))){
+        
+    } else if ((second && secondFromSecond) || (second && !firstFromSecond)|| (secondFromSecond && !first)){
         alphaValue = 0.08;
         return alphaValue;
-
-    } else if (((sensorValue >= 36) && (sensorValue < 52)) || ((sensorValue2 >= 36) && (sensorValue2 < 52))){
+        
+    } else if ((third && thirdFromSecond) || (third && !secondFromSecond) ||  (thirdFromSecond && !second) || (third && !firstFromSecond) || (thirdFromSecond && !first)){
         alphaValue = 0.16;
         return alphaValue;
-
-    } else if (((sensorValue >= 52) && (sensorValue < 68)) || ((sensorValue2 >= 52) && (sensorValue2 < 68))){
+        
+    } else if ((fourth && fourthFromSecond) || (fourth) || (fourthFromSecond)){
         alphaValue = 0.24;
         return alphaValue;
         
-    } else if (((sensorValue >= 68) && (sensorValue < 84)) || ((sensorValue2 >= 68) && (sensorValue2 < 84))){
+    } else if ((fifth && fifthFromSecond) || fifth || fifthFromSecond){
         alphaValue = 0.32;
         return alphaValue;
         
-    } else if (((sensorValue >= 84) && (sensorValue < 100)) || ((sensorValue2 >= 84) && (sensorValue2 < 100))){
+    } else if ((sixth && sixthFromSecond) || sixth || sixthFromSecond){
         alphaValue = 0.4;
         return alphaValue;
         
-    } else if (((sensorValue >= 100) && (sensorValue < 116)) || ((sensorValue2 >= 100) && (sensorValue2 < 116))){
+    } else if ((seventh && seventhFromSecond) || seventh|| seventhFromSecond){
         alphaValue = 0.48;
         return alphaValue;
         
-    } else if (((sensorValue >= 116) && (sensorValue < 142)) || ((sensorValue2 >= 116) && (sensorValue2 < 142))){
+    } else if ((eighth && eighthFromSecond) || eighth || eighthFromSecond){
         alphaValue = 0.56;
         return alphaValue;
         
-    } else if (((sensorValue >= 142) && (sensorValue < 168)) || ((sensorValue2 >= 142) && (sensorValue2 < 168))){
+    } else if ((ninth && ninthFromSecond) || ninth || ninthFromSecond){
         alphaValue = 0.64;
         return alphaValue;
         
-    } else if (((sensorValue >= 168) && (sensorValue < 182)) || ((sensorValue2 >= 168) && (sensorValue2 < 182))){
+    } else if ((tenth && tenthFromSecond) || tenth || tenthFromSecond){
         alphaValue = 0.72;
         return alphaValue;
         
-    } else if (((sensorValue >= 182) && (sensorValue < 228)) || ((sensorValue2 >= 182) && (sensorValue2 < 228))){
+    } else if ((eleventh && eleventhFromSecond) || eleventh|| eleventhFromSecond){
         alphaValue = 0.8;
         return alphaValue;
         
-    } else if (((sensorValue >= 228) && (sensorValue < 256)) || ((sensorValue2 >= 228) && (sensorValue2 < 256))){
+    } else if (((sensorValue >= 232) &&  (sensorValue2 >= 232))){
         alphaValue = 1.0;
+        return alphaValue;
+    } else if((sensorValue >= 232 && firstFromSecond) || (sensorValue2 >= 228 && first)) {
+        alphaValue = 0.0;
+        return alphaValue;
+    } else if ((sensorValue >= 232 && secondFromSecond) || (sensorValue2 >= 228 && second)){
+        alphaValue = 0.08;
+        return alphaValue;
+    }else if ((sensorValue >= 232 && thirdFromSecond)|| (sensorValue2 >= 232 && third)){
+        alphaValue = 0.16;
+        return alphaValue;
+    } else if((sensorValue >= 232 && fourthFromSecond) || (sensorValue2 >= 232 && fourth)){
+        alphaValue = 0.24;
+        return alphaValue;
+    } else if((sensorValue >= 232 && fifthFromSecond) || (sensorValue2 >= 232 && fifth)){
+        alphaValue = 0.32;
+        return alphaValue;
+    } else if ((sensorValue >= 232 && sixthFromSecond) || (sensorValue2 >= 232 && sixth)){
+        alphaValue = 0.40;
+        return alphaValue;
+    } else if((sensorValue >= 232 && seventhFromSecond) || (sensorValue2 >= 232 && seventh)){
+        alphaValue = 0.48;
+        return alphaValue;
+    } else if((sensorValue >= 232 && eighthFromSecond) || (sensorValue2 >= 232 && eighth)){
+        alphaValue = 0.56;
+        return alphaValue;
+    } else if ((sensorValue >= 232 && ninthFromSecond) || (sensorValue2 >= 232 && ninth)){
+        alphaValue = 0.64;
+        return alphaValue;
+    } else if ((sensorValue >= 232 && tenthFromSecond) || (sensorValue2 >= 232 && tenth)){
+        alphaValue = 0.72;
+        return alphaValue;
+    } else if ((sensorValue >= 232 && eleventhFromSecond) || (sensorValue2 >= 232 && eleventh)){
+        alphaValue = 0.80;
         return alphaValue;
     } else{
         return alphaValue;
     }
-        
+    
+//    
 }
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    
+    if(key == '1'){
+        selectVideo(20);
+    }
+    else if(key =='2'){
+        selectVideo(280);
+    }
+        
 }
 
 //--------------------------------------------------------------
