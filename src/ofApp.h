@@ -31,8 +31,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    float triggerFunction(int sensorValue1, int sensorValue2);
-
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
 
@@ -44,13 +42,11 @@ public:
     
     ofSerial serial;
     int firstSensor, secondSensor;
-    float shaderValue;
-    int oldShaderValue;
 
     bool getSerialMessage;
     int countCycles;
     int selectVideo(int sensorValue);
-    int prevSensorReading =0;
+    int prevSensorReading = 0;
     
     ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;
