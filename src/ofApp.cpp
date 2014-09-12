@@ -89,63 +89,28 @@ void ofApp::update(){
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-//    countCycles = 0;
-    
-//    int averageFirstSensor;
-//    int averageSecondSensor;
-//    int index = 0;
     
     memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
-//    memset(averageFirstSensor, 0, bytesRequired * sizeof(uint8_t));
-//    memset(averageSecondSensor, 0, bytesRequired * sizeof(uint8_t));
 
     if(serial.available() > 0){
         serial.writeByte('A');
 
     if(getSerialMessage){
 
-//        cout << "I'm here" << endl;
         serial.readBytes( bytesReturned, bytesRemaining );
-//        index++;
         
         if(bytesReturned[4] == 'z'){
             if(bytesReturned[0] == '1'){
                 firstSensor = bytesReturned[1];
-//                averageFirstSensor += firstSensor;
-
-//                cout<<"firstSensor after1: "<< firstSensor <<endl;
-//                cout<<"averageFirstSensor after1: "<< averageFirstSensor <<endl;
-
             }
             if(bytesReturned[2] == '2'){
                 secondSensor = bytesReturned[3];
-//                averageSecondSensor += secondSensor;
-
-//                cout<<"secondSensor after1: "<<secondSensor<<endl;
-//                cout<<"averageSecondSensor after1: "<< averageSecondSensor <<endl;
-
             }
             }
- 
-//        index++;
-//        averageFirstSensor += firstSensor;
-//        averageSecondSensor += secondSensor;
-//        if(index == 10){
-//            firstSensor = averageFirstSensor / 10;
-//            secondSensor = averageSecondSensor / 10;
-//            index = 0;
-//        }
      
         serial.flush();
 
     }
-//        if (index == 5) {
-//            firstSensor = averageFirstSensor / index;
-//            secondSensor = averageSecondSensor / index;
-//            cout<<"averageSecondSensor after1: "<< averageSecondSensor <<endl;
-//            
-//            index = 0;
-//        }
         getSerialMessage = false;
 
 
@@ -212,8 +177,40 @@ void ofApp::keyReleased(int key){
     }
     else if(key =='2'){
         selectVideo(280);
+    } else if (key == '3'){
+        selectVideo(280);
+    
     }
-        
+    
+    /* switch (key){
+     
+     case '1':
+     selectVideo(20)
+     
+     break;
+     case '2':
+     
+     case '3':
+     
+     case '4':
+     
+     case '5':
+     
+     case '6':
+     
+     case '7':
+     
+     case '8':
+     
+     case '2':
+     
+     case '2':
+     
+     case 'o':
+     
+     case 'p':
+     */
+    
 }
 
 //--------------------------------------------------------------
