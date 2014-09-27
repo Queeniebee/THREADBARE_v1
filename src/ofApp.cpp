@@ -48,7 +48,7 @@ void ofApp::setup(){
     fbo.end();
 
     serial.enumerateDevices();
-    serial.setup(0,9600);
+    serial.setup(0,115200);
 
     mainOutputSyphonServer.setName("Screen Output");
 
@@ -57,69 +57,57 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     ofSoundUpdate();
- /*   int bytesRequired = 5;
-    uint8_t bytesReturned[bytesRequired];
-    int bytesRemaining = bytesRequired;
-    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-    int Result = 0;
-    
-    memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
-    
-        if(serial.available() > 0){
-            
-            serial.readBytes( bytesReturned, bytesRemaining );
-            if(bytesReturned[4] == 'z'){
-                if(bytesReturned[0] == '1'){
-                    firstSensor = bytesReturned[1];
-                    cout<<"firstSensor after1: "<< firstSensor <<endl;
-                
-                }
-                if(bytesReturned[2] == '2'){
-                    secondSensor = bytesReturned[3];
-                    cout<<"secondSensor after1: "<<secondSensor<<endl;
+ /*
 
-            }
-            }
-            serial.flush();
-            serial.writeByte('A');
-        }*/
+  WORKING SERIAL VERSION 
+  =======================
+  */
 
-    
     int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
     int bytesRemaining = bytesRequired;
-    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-    
     memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
-
-    if(serial.available() > 0){
-        serial.writeByte('A');
-
-    if(getSerialMessage){
-
-        serial.readBytes( bytesReturned, bytesRemaining );
+    
+    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
+    int result = serial.readBytes( &bytesReturned[bytesPreventOverwrite], bytesRemaining );
+    
+    while ( bytesRemaining > 0 ){
+        if(serial.available() > 0){
+            serial.writeByte('A');
         
-        if(bytesReturned[4] == 'z'){
-            if(bytesReturned[0] == '1'){
-                firstSensor = bytesReturned[1];
+            if ( result == OF_SERIAL_ERROR )
+            {
+                // something bad happened
+                ofLog( OF_LOG_ERROR, "unrecoverable error reading from serial" );
+                // bail out
+                break;
             }
-            if(bytesReturned[2] == '2'){
-                secondSensor = bytesReturned[3];
+            else if ( result == OF_SERIAL_NO_DATA )
+            {
+                // nothing was read, try again
             }
+            else
+            {
+                // we read some data!
+                bytesRemaining -= result;
             }
-     
-        serial.flush();
+            
+            if(bytesReturned[4] == 'z'){
+                if(bytesReturned[0] == '1'){
+                    firstSensor = bytesReturned[1];
+                }
+                if(bytesReturned[2] == '2'){
+                    secondSensor = bytesReturned[3];
+                    
+                }
+            }
+            serial.flush();
+            cout<<"result: "<<result<<endl;
 
+        }        
     }
-        getSerialMessage = false;
-
-
-    }
-    countCycles++;
-
-    if(countCycles == 5){
-        getSerialMessage = true;
-        countCycles = 0;
+    if (bytesRemaining == 0) {
+        serial.writeByte('A');
     }
 
     int selectedSensor = MIN(firstSensor, secondSensor);
@@ -158,7 +146,7 @@ void ofApp::keyPressed(int key){
         ofToggleFullscreen();
     }
 }
-
+//---------------------------------------------------------
 int ofApp::selectVideo(int sensorValue){
     int sensorMin = 0;
     int sensorMax = 300;
@@ -172,44 +160,68 @@ int ofApp::selectVideo(int sensorValue){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    if(key == '1'){
-        selectVideo(20);
-    }
-    else if(key =='2'){
-        selectVideo(280);
-    } else if (key == '3'){
-        selectVideo(280);
+//    if(key == '1'){
+//        selectVideo(20);
+//    }
+//    else if(key =='2'){
+//        selectVideo(280);
+//    } else if (key == '3'){
+//        selectVideo(280);
+//    
+//    }
     
-    }
-    
-    /* switch (key){
+     switch (key){
      
      case '1':
-     selectVideo(20)
-     
+             selectVideo(45);
+
      break;
+     
      case '2':
+             selectVideo(45);
+     break;
      
      case '3':
+             selectVideo(60);
+     break;
      
      case '4':
+             selectVideo(80);
+     break;
      
      case '5':
+             selectVideo(120);
+     break;
      
      case '6':
+             selectVideo(130);
+     break;
      
      case '7':
+             selectVideo(160);
+     break;
      
      case '8':
+             selectVideo(185);
+     break;
      
-     case '2':
+     case '9':
+             selectVideo(210);
+     break;
      
-     case '2':
-     
-     case 'o':
+     case '0':
+             selectVideo(255);
+     break;
      
      case 'p':
-     */
+             selectVideo(280);
+     break;
+     
+     case 'o':
+             (300);
+     break;
+     }
+     
     
 }
 
