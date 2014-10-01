@@ -13,7 +13,7 @@
 #include <vector>
 #include "ofUtils.h"
 
-#include "ofxSyphon.h"
+//#include "ofxSyphon.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -48,8 +48,8 @@ public:
     int selectVideo(int sensorValue);
     int prevSensorReading = 0;
     
-    ofxSyphonServer mainOutputSyphonServer;
-	ofxSyphonServer individualTextureSyphonServer;
+//    ofxSyphonServer mainOutputSyphonServer;
+//	ofxSyphonServer individualTextureSyphonServer;
 
 
 };

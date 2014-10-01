@@ -24,13 +24,6 @@ void ofApp::setup(){
 
     decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
     
- /*   for(int i = 0; i< NUM_CLIPS; i++){
-        videos[i].setPixelFormat(OF_PIXELS_RGBA);
-        videos[i].loadMovie(paths[i], decodeMode);
-        videos[i].setVolume(0.0f);
-        videos[i].play();
-    } */
-    
     for(int i = 0; i< sizeof(videos)/sizeof(ofQTKitPlayer); i++){
         videos[i].loadMovie(paths[i], decodeMode);
     }
@@ -50,7 +43,7 @@ void ofApp::setup(){
     serial.enumerateDevices();
     serial.setup(0,115200);
 
-    mainOutputSyphonServer.setName("Screen Output");
+//    mainOutputSyphonServer.setName("Screen Output");
 
 }
 
@@ -70,6 +63,7 @@ void ofApp::update(){
     
     int bytesPreventOverwrite = bytesRequired - bytesRemaining;
     int result = serial.readBytes( &bytesReturned[bytesPreventOverwrite], bytesRemaining );
+    serial.readBytes( &bytesReturned[bytesRequired], bytesRemaining );
     
     while ( bytesRemaining > 0 ){
         if(serial.available() > 0){
@@ -101,14 +95,13 @@ void ofApp::update(){
                     
                 }
             }
-            serial.flush();
+//            serial.flush();
             cout<<"result: "<<result<<endl;
+            cout<<"sensorReading"<<firstSensor<<endl;
 
         }        
     }
-    if (bytesRemaining == 0) {
-        serial.writeByte('A');
-    }
+
 
     int selectedSensor = MIN(firstSensor, secondSensor);
     if(selectedSensor != prevSensorReading){
@@ -120,6 +113,9 @@ void ofApp::update(){
         clipsPointer->setVolume(0.0f);
         clipsPointer->play();
         
+    }
+    if (bytesRemaining == 0) {
+        serial.writeByte('A');
     }
     prevSensorReading = selectedSensor;
     clipsPointer->update();
@@ -135,7 +131,7 @@ void ofApp::draw(){
     fbo.end();
     
     fbo.draw(0,0, ofGetWindowWidth(), ofGetWindowHeight());
-    mainOutputSyphonServer.publishScreen();
+//    mainOutputSyphonServer.publishScreen();
 
 }
 
