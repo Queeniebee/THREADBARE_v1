@@ -1,0 +1,4 @@
+ofxNetwork
+ofxOsc
+ofxSimpleSerial
+ofxSyphon

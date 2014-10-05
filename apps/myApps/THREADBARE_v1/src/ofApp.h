@@ -12,7 +12,6 @@
 #include "ofxSimpleSerial.h"
 #include <vector>
 #include "ofUtils.h"
-#include "threadSerial.h"
 
 //#include "ofxSyphon.h"
 
@@ -32,11 +31,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void conversionToInt(char* fromSerial);
-    int sensors(int *reads);
-    
-    int sensorReadings[NUM_BYTES];
-
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
 
@@ -45,8 +39,8 @@ public:
     ofQTKitPlayer videos[NUM_CLIPS];
     
     ofFbo fbo, maskFbo;
-    threadSerial mSerial;
     
+    ofSerial serial;
     int firstSensor, secondSensor;
 
     bool getSerialMessage;

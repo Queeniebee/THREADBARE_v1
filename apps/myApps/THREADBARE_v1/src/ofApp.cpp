@@ -40,17 +40,10 @@ void ofApp::setup(){
     ofClear(0,0,0,255);
     fbo.end();
 
-//    serial.enumerateDevices();
-//    serial.setup(0,115200);
+    serial.enumerateDevices();
+    serial.setup(0,115200);
 
-    mSerial.openSerialPort();
-    mSerial.startContinuousRead(true);
-
-//    ofAddListener(mSerial.readFromSerial, this, &ofApp::conversionToInt);
-    ofAddListener(mSerial.readFromSerial, this, &ofApp::conversionToInt);
-
-
-    //    mainOutputSyphonServer.setName("Screen Output");
+//    mainOutputSyphonServer.setName("Screen Output");
 
 }
 
@@ -61,7 +54,7 @@ void ofApp::update(){
 
   WORKING SERIAL VERSION 
   =======================
-  
+  */
 
     int bytesRequired = 5;
     uint8_t bytesReturned[bytesRequired];
@@ -93,7 +86,6 @@ void ofApp::update(){
                 bytesRemaining -= result;
             }
             
-            ofNotifyEvent(sensorReading)(3 PARAMS);
             if(bytesReturned[4] == 'z'){
                 if(bytesReturned[0] == '1'){
                     firstSensor = bytesReturned[1];
@@ -103,33 +95,29 @@ void ofApp::update(){
                     
                 }
             }
-            serial.flush();
+//            serial.flush();
             cout<<"result: "<<result<<endl;
             cout<<"sensorReading"<<firstSensor<<endl;
 
         }        
-    } 
+    }
 
-*/
 
-//    int selectedSensor = MIN(firstSensor, secondSensor);
-    mSerial.sendRequest();
-
-    int currentSensorReading = sensors(sensorReadings);
-    if(currentSensorReading != prevSensorReading){
+    int selectedSensor = MIN(firstSensor, secondSensor);
+    if(selectedSensor != prevSensorReading){
         //do stuff here
         //else ignore it
-        int currentVideoIndex = selectVideo(currentSensorReading);
+        int currentVideoIndex = selectVideo(selectedSensor);
         clipsPointer->stop();
         clipsPointer = &videos[currentVideoIndex];
         clipsPointer->setVolume(0.0f);
         clipsPointer->play();
         
     }
-/*    if (bytesRemaining == 0) {
+    if (bytesRemaining == 0) {
         serial.writeByte('A');
-    } */
-    prevSensorReading = currentSensorReading;
+    }
+    prevSensorReading = selectedSensor;
     clipsPointer->update();
 
 }
@@ -165,100 +153,68 @@ int ofApp::selectVideo(int sensorValue){
 
     return currentVideoIndex;
 }
-//--------------------------------------------------------------
-void ofApp::conversionToInt(char* fromSerial){
-//    int sensorReadings[NUM_BYTES];
-    vector<string>convertedReadings = ofSplitString(fromSerial, ",");
-    //    int sensorReadings[BYTES_REQUIRED];
-    for(int i = 0; i < convertedReadings.size(); i++){
-        sensorReadings[i] = ofToInt(convertedReadings[i]);
-    }
-//    ofNotifyEvent(sensorReading, *sensorReadings, this);
-//    return *sensorReadings;
-}
-//--------------------------------------------------------------
 
-int ofApp::sensors(int *reads){
-    //cast from string to int
-    int firstSensor;
-    int secondSensor;
-    int selectedSensor;
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key){
+//    if(key == '1'){
+//        selectVideo(20);
+//    }
+//    else if(key =='2'){
+//        selectVideo(280);
+//    } else if (key == '3'){
+//        selectVideo(280);
+//    
+//    }
     
-    if(reads[0] == 1){
-            firstSensor = reads[1];
-        }
-        if(reads[2] == 2){
-            secondSensor = reads[3];
-            
-        }
-    selectedSensor = MIN(firstSensor, secondSensor);
-    return (selectedSensor);
-}
-//--------------------------------------------------------------
-
-void ofApp::keyReleased(int key){    
      switch (key){
      
      case '1':
-             firstSensor = 45;
-             secondSensor = 54;
+             selectVideo(45);
 
      break;
      
      case '2':
-             firstSensor = 54;
-             secondSensor = 45;
-             
+             selectVideo(45);
      break;
      
      case '3':
-             firstSensor = 60;
-             secondSensor = 70;
+             selectVideo(60);
      break;
      
      case '4':
-             firstSensor = 80;
-             secondSensor = 70;
+             selectVideo(80);
      break;
      
      case '5':
-             firstSensor = 120;
-             secondSensor = 130;
+             selectVideo(120);
      break;
      
      case '6':
-             firstSensor = 130;
-             secondSensor = 145;
+             selectVideo(130);
      break;
      
      case '7':
-             firstSensor = 160;
-             secondSensor = 145;
+             selectVideo(160);
      break;
      
      case '8':
-             firstSensor = 185;
-             secondSensor = 150;
+             selectVideo(185);
      break;
      
      case '9':
-             firstSensor = 200;
-             secondSensor = 210;
+             selectVideo(210);
      break;
      
      case '0':
-             firstSensor = 255;
-             secondSensor = 230;;
+             selectVideo(255);
      break;
      
      case 'p':
-             firstSensor = 230;
-             secondSensor = 280;
+             selectVideo(280);
      break;
      
      case 'o':
-             firstSensor = 300;
-             secondSensor = 300;
+             (300);
      break;
      }
      
