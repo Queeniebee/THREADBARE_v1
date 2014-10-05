@@ -31,7 +31,7 @@ void ofApp::setup(){
     clipsPointer->play();
     
     videoSound.loadSound("Threadbare_voiceover.mp3");
-    videoSound.setVolume(1.0f);
+    videoSound.setVolume(0.0f);
     videoSound.setLoop(true);
     videoSound.play();
     
@@ -40,13 +40,9 @@ void ofApp::setup(){
     ofClear(0,0,0,255);
     fbo.end();
 
-//    serial.enumerateDevices();
-//    serial.setup(0,115200);
-
     mSerial.openSerialPort();
     mSerial.startContinuousRead(true);
 
-//    ofAddListener(mSerial.readFromSerial, this, &ofApp::conversionToInt);
     ofAddListener(mSerial.readFromSerial, this, &ofApp::conversionToInt);
 
 
@@ -57,62 +53,10 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     ofSoundUpdate();
- /*
-
-  WORKING SERIAL VERSION 
-  =======================
-  
-
-    int bytesRequired = 5;
-    uint8_t bytesReturned[bytesRequired];
-    int bytesRemaining = bytesRequired;
-    memset(bytesReturned, 0, bytesRequired * sizeof(uint8_t));
-    
-    int bytesPreventOverwrite = bytesRequired - bytesRemaining;
-    int result = serial.readBytes( &bytesReturned[bytesPreventOverwrite], bytesRemaining );
-    serial.readBytes( &bytesReturned[bytesRequired], bytesRemaining );
-    
-    while ( bytesRemaining > 0 ){
-        if(serial.available() > 0){
-            serial.writeByte('A');
-        
-            if ( result == OF_SERIAL_ERROR )
-            {
-                // something bad happened
-                ofLog( OF_LOG_ERROR, "unrecoverable error reading from serial" );
-                // bail out
-                break;
-            }
-            else if ( result == OF_SERIAL_NO_DATA )
-            {
-                // nothing was read, try again
-            }
-            else
-            {
-                // we read some data!
-                bytesRemaining -= result;
-            }
-            
-            ofNotifyEvent(sensorReading)(3 PARAMS);
-            if(bytesReturned[4] == 'z'){
-                if(bytesReturned[0] == '1'){
-                    firstSensor = bytesReturned[1];
-                }
-                if(bytesReturned[2] == '2'){
-                    secondSensor = bytesReturned[3];
-                    
-                }
-            }
-            serial.flush();
-            cout<<"result: "<<result<<endl;
-            cout<<"sensorReading"<<firstSensor<<endl;
-
-        }        
-    } 
-
-*/
 
 //    int selectedSensor = MIN(firstSensor, secondSensor);
+//    ofAddListener(mSerial.readFromSerial, this, &ofApp::conversionToInt);
+
     mSerial.sendRequest();
 
     int currentSensorReading = sensors(sensorReadings);
@@ -166,7 +110,7 @@ int ofApp::selectVideo(int sensorValue){
     return currentVideoIndex;
 }
 //--------------------------------------------------------------
-void ofApp::conversionToInt(char* fromSerial){
+void ofApp::conversionToInt(string &fromSerial){
 //    int sensorReadings[NUM_BYTES];
     vector<string>convertedReadings = ofSplitString(fromSerial, ",");
     //    int sensorReadings[BYTES_REQUIRED];

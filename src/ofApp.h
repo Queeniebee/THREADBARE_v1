@@ -9,12 +9,14 @@
 #include <GLFW/glfw3.h>
 #include "GLFW/glfw3native.h"
 #include "ofQTKitPlayer.h"
-#include "ofxSimpleSerial.h"
 #include <vector>
 #include "ofUtils.h"
 #include "threadSerial.h"
 
 //#include "ofxSyphon.h"
+//#include "ofxSimpleSerial.h"
+
+#define NUM_BYTES 7
 
 class ofApp : public ofBaseApp{
 public:
@@ -32,7 +34,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void conversionToInt(char* fromSerial);
+    void conversionToInt(string &fromSerial);
     int sensors(int *reads);
     
     int sensorReadings[NUM_BYTES];

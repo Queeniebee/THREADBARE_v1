@@ -32,10 +32,8 @@ public:
     void stopContinuousRead();
     void sendRequest();
     void update(ofEventArgs & args);
-//    void conversionToInt(char* fromSerial);
 
     bool stopReadFromSerialPort();
-//    int sensors(int *reads);
     
     int bytesRequired = BYTES_REQUIRED;
     int bytesRemaining;
