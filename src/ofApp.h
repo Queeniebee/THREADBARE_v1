@@ -34,10 +34,14 @@ public:
     ofSoundPlayer videoSound;
     string paths[NUM_CLIPS];
 
-    ofQTKitPlayer *clipsPointer;
-    ofQTKitDecodeMode decodeMode;
-    ofQTKitPlayer videos[NUM_CLIPS];
+//    ofQTKitPlayer *clipsPointer;
+//    ofQTKitDecodeMode decodeMode;
+//    ofQTKitPlayer videos[NUM_CLIPS];
     
+    ofVideoPlayer *clipsPointer;
+    ofVideoFormat OF_PIXELS_RGB;
+    ofVideoPlayer videos[NUM_CLIPS];
+
     ofFbo fbo, maskFbo;
     
     ofSerial serial;

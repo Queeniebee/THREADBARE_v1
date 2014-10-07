@@ -5,7 +5,7 @@ void ofApp::setup(){
     
     ofSetVerticalSync(true);
     getSerialMessage = false;
-
+/*
     paths[0] = "THREADBARE_hair/Resources/THREADBARE_hair.mov";
     paths[1] = "THREADBARE_shoes4/Resources/THREADBARE_shoes4.mov";
     paths[2] = "THREADBARE_replacev52/Resources/THREADBARE_replacev52.mov";
@@ -17,15 +17,28 @@ void ofApp::setup(){
     paths[8] = "THREADBARE_v6/Resources/THREADBARE_v6.mov"; 
     paths[9] = "THREADBARE_v42/Resources/THREADBARE_v42.mov"; 
     paths[10] = "THREABARE_v2/Resources/THREABARE_v2.mov";
-    paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov";
+    paths[11] = "THREADBARE_curtain/Resources/THREADBARE_curtain.mov"; */
+    
+    paths[0] = "for_SHOW/THREADBARE_hair.mov";
+    paths[1] = "for_SHOW/THREADBARE_shoes4.mov";
+    paths[2] = "for_SHOW/THREADBARE_replacev52.mov";
+    paths[3] = "for_SHOW/THREADBARE_shoes3.mov";
+    paths[4] = "for_SHOW/THREADBARE_v9_c.mov";
+    paths[5] = "for_SHOW/THREADBARE_shoes1.mov";
+    paths[6] = "for_SHOW/THREADBARE_v6.mov";
+    paths[7] = "for_SHOW/THREADBARE_v7.mov";
+    paths[8] = "for_SHOW/THREADBARE_v6.mov";
+    paths[9] = "for_SHOW/THREADBARE_v42.mov";
+    paths[10] = "for_SHOW/THREABARE_v2.mov";
+    paths[11] = "for_SHOW/THREADBARE_curtain.mov";
 
     clipsPointer = &videos[0];
-    clipsPointer->setPixelFormat(OF_PIXELS_RGBA);
+//    clipsPointer->setPixelFormat(OF_PIXELS_RGBA);
 
-    decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
-    
-    for(int i = 0; i< sizeof(videos)/sizeof(ofQTKitPlayer); i++){
-        videos[i].loadMovie(paths[i], decodeMode);
+//      decodeMode = OF_QTKIT_DECODE_PIXELS_AND_TEXTURE;
+    /*ofQTKitPlayer*/
+    for(int i = 0; i< sizeof(videos)/sizeof(ofVideoPlayer); i++){
+        videos[i].loadMovie(paths[i] /*,decodeMode*/);
     }
     clipsPointer->setVolume(0.0f);
     clipsPointer->play();
