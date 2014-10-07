@@ -13,7 +13,7 @@
 #include "ofEvents.h"
 #include "ofMain.h"
 
-#define BYTES_REQUIRED 5
+#define BYTES_REQUIRED 7
 
 class threadSerial {
 

@@ -4,6 +4,7 @@
 #define GLFW_EXPOSE_NATIVE_NSGL
 
 #define NUM_CLIPS 12
+#define NUM_BYTES 7
 
 #include "ofMain.h"
 #include <GLFW/glfw3.h>
@@ -16,7 +17,6 @@
 //#include "ofxSyphon.h"
 //#include "ofxSimpleSerial.h"
 
-#define NUM_BYTES 7
 
 class ofApp : public ofBaseApp{
 public:
